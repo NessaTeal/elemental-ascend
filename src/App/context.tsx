@@ -59,7 +59,7 @@ function reducer(state: State, action: Action) {
             let stacks = 1;
 
             if (curse) {
-              stacks = curse.stacks++;
+              stacks = ++curse.stacks;
             } else {
               draftEnemies[target].afflictions.push({
                 type: 'curse',
