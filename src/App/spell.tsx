@@ -1,8 +1,11 @@
 import React from 'react';
 import cx from 'classnames';
 
+export type SpellType = 'fireball' | 'lightning_strike' | 'shadow_bolt';
+
 export interface SpellProps {
   name: string;
+  type: SpellType;
   active?: boolean;
 }
 
