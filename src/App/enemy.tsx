@@ -1,24 +1,17 @@
-import React, { ReactElement } from 'react';
+import React from 'react';
 import './style.css';
 
-class Enemy {
+export interface EnemyProps {
   name: string;
-
-  constructor(name: string) {
-    this.name = name;
-  }
-
-  onClick(): void {
-    console.log(`My name is ${this.name} and I'm your enemy`);
-  }
-
-  render(): ReactElement {
-    return (
-      <div className="enemy" onClick={() => this.onClick()}>
-        {this.name}
-      </div>
-    );
-  }
+  onClick?: () => void;
 }
+
+const Enemy: React.FC<EnemyProps> = ({ name, onClick }: EnemyProps) => {
+  return (
+    <div className="enemy" onClick={onClick}>
+      {name}
+    </div>
+  );
+};
 
 export default Enemy;

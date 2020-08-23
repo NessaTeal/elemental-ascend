@@ -1,8 +1,8 @@
 import React, { ReactElement } from 'react';
-import Enemy from './enemy';
+import { EnemyProps } from './enemy';
 
 interface State {
-  enemies: Enemy[];
+  enemies: EnemyProps[];
 }
 const StateContext = React.createContext<State | undefined>(undefined);
 
@@ -27,7 +27,7 @@ export function Provider({
   children: React.ReactNode;
 }): ReactElement {
   const [state, dispatch] = React.useReducer(reducer, {
-    enemies: [new Enemy('Wolfie'), new Enemy('Jom')],
+    enemies: [{ name: 'Wolfie' }, { name: 'Jom' }],
   });
 
   return (
