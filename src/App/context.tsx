@@ -1,32 +1,44 @@
 import React, { ReactElement } from 'react';
 import { EnemyProps, EnemyAffliction } from './enemy';
-import { SpellProps } from './spell';
+import { SpellProps, SpellType } from './spell';
 import produce from 'immer';
+import { SpellSlotProps } from './spell-slot';
 
 interface State {
   enemies: EnemyProps[];
   spells: SpellProps[];
-  currentSpell: number;
+  spellSlots: SpellSlotProps[];
+  currentSlot: number;
+  currentSpell: SpellType;
 }
 const StateContext = React.createContext<State | undefined>(undefined);
 
 type Dispatch = (action: Action) => void;
-type Action = {
-  type: 'castSpell';
-  target: number;
-};
+type Action =
+  | {
+      type: 'castSpell';
+      target: number;
+    }
+  | {
+      type: 'changeSpell';
+      spellType: SpellType;
+    };
 const DispatchContext = React.createContext<Dispatch | undefined>(undefined);
 
 function reducer(state: State, action: Action) {
   switch (action.type) {
     case 'castSpell': {
       const { target } = action;
-      const { enemies, spells, currentSpell } = state;
+      const { enemies, spells, spellSlots, currentSlot, currentSpell } = state;
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      const spellPower = spells.find((s) => s.type === currentSpell)!.power;
+      const slotPower = spellSlots[currentSlot].power;
+      const totalPower = Math.ceil(spellPower * slotPower);
 
       const newEnemies = produce(enemies, (draftEnemies) => {
-        switch (spells[currentSpell].type) {
+        switch (currentSpell) {
           case 'fireball': {
-            draftEnemies[target].health -= 10;
+            draftEnemies[target].health -= totalPower;
             break;
           }
           case 'lightning_strike': {
@@ -35,8 +47,8 @@ function reducer(state: State, action: Action) {
               secondTarget = Math.floor(Math.random() * draftEnemies.length);
             }
 
-            draftEnemies[target].health -= 8;
-            draftEnemies[secondTarget].health -= 3;
+            draftEnemies[target].health -= Math.ceil(totalPower * 0.85);
+            draftEnemies[secondTarget].health -= Math.ceil(totalPower * 0.25);
             break;
           }
           case 'shadow_bolt': {
@@ -55,7 +67,7 @@ function reducer(state: State, action: Action) {
               });
             }
 
-            draftEnemies[target].health -= 6 * stacks;
+            draftEnemies[target].health -= totalPower * stacks;
             break;
           }
         }
@@ -64,7 +76,13 @@ function reducer(state: State, action: Action) {
       return {
         ...state,
         enemies: newEnemies,
-        currentSpell: currentSpell === spells.length - 1 ? 0 : currentSpell + 1,
+        currentSlot: currentSlot === spells.length - 1 ? 0 : currentSlot + 1,
+      };
+    }
+    case 'changeSpell': {
+      return {
+        ...state,
+        currentSpell: action.spellType,
       };
     }
   }
@@ -81,11 +99,13 @@ export function Provider({
       { name: 'Jom', health: 50, maxHealth: 50, afflictions: [] },
     ],
     spells: [
-      { name: 'Fireball', type: 'fireball' },
-      { name: 'Lightning  strike', type: 'lightning_strike' },
-      { name: 'Shadow bolt', type: 'shadow_bolt' },
+      { name: 'Fireball', type: 'fireball', power: 10 },
+      { name: 'Lightning  strike', type: 'lightning_strike', power: 8 },
+      { name: 'Shadow bolt', type: 'shadow_bolt', power: 6 },
     ],
-    currentSpell: 0,
+    spellSlots: [{ power: 1 }, { power: 1.2 }, { power: 1.45 }],
+    currentSlot: 0,
+    currentSpell: 'fireball',
   });
 
   return (

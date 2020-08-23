@@ -19,19 +19,14 @@
   flex-direction: column;
   align-items: center;
 }
-
-.top {
-  display: flex;
-}
-
 .spell.active {
   outline: rgb(185, 79, 79) 3px solid;
 }
 
 .spell {
   width: 200px;
-  height: 30px;
-  margin: 5px;
+  height: 400px;
+  padding: 5px;
   border: black 1px solid;
   user-select: none;
 }
@@ -55,4 +50,25 @@
 .enemy .bot {
   position: absolute;
   bottom: 0;
+}
+
+.spell-slot.active {
+  outline: rgb(185, 79, 79) 3px solid;
+}
+
+.spell-slot {
+  width: 200px;
+  height: 30px;
+  margin: 5px;
+  border: black 1px solid;
+  user-select: none;
+}
+
+.spell-chain {
+  display: flex;
+}
+
+.enemies {
+  display: flex;
+  justify-content: center;
 }
