@@ -1,22 +1,30 @@
 import React, { ReactElement } from 'react';
 import { EnemyProps } from './enemy';
+import { SpellProps } from './spell';
 
 interface State {
   enemies: EnemyProps[];
+  spells: SpellProps[];
+  currentSpell: number;
 }
 const StateContext = React.createContext<State | undefined>(undefined);
 
 type Dispatch = (action: Action) => void;
 type Action = {
-  type: 'useless';
+  type: 'castSpell';
+  target: number;
 };
 const DispatchContext = React.createContext<Dispatch | undefined>(undefined);
 
 function reducer(state: State, action: Action) {
   switch (action.type) {
-    case 'useless': {
-      console.log('Told ya');
-      return state;
+    case 'castSpell': {
+      const { spells, currentSpell } = state;
+
+      return {
+        ...state,
+        currentSpell: currentSpell === spells.length - 1 ? 0 : currentSpell + 1,
+      };
     }
   }
 }
@@ -28,6 +36,12 @@ export function Provider({
 }): ReactElement {
   const [state, dispatch] = React.useReducer(reducer, {
     enemies: [{ name: 'Wolfie' }, { name: 'Jom' }],
+    spells: [
+      { name: 'Fireball' },
+      { name: 'Lightning  strike' },
+      { name: 'Shadow bolt' },
+    ],
+    currentSpell: 0,
   });
 
   return (

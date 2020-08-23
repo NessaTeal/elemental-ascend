@@ -1,10 +1,12 @@
 import React from 'react';
 import './style.css';
-import { useState } from './context';
+import { useState, useDispatch } from './context';
 import Enemy from './enemy';
+import SpellBook from './spell-book';
 
 const App: React.FC = () => {
   const state = useState();
+  const dispatch = useDispatch();
 
   return (
     <div className="App">
@@ -13,11 +15,13 @@ const App: React.FC = () => {
           <Enemy
             key={index}
             {...e}
-            onClick={() => console.log(`${e.name} was clicked`)}
+            onClick={() => dispatch({ type: 'castSpell', target: index })}
           />
         ))}
       </div>
-      <div className="bot">Bottom content will be added soon</div>
+      <div className="bot">
+        <SpellBook />
+      </div>
     </div>
   );
 };
