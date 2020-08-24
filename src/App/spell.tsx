@@ -2,10 +2,9 @@ import React from 'react';
 import cx from 'classnames';
 import { useState } from './context';
 
-export type SpellType = 'fireball' | 'lightning_strike' | 'shadow_bolt';
+export type SpellType = 'Fireball' | 'Lightning strike' | 'Shadow bolt';
 
 export interface SpellProps {
-  name: string;
   type: SpellType;
   power: number;
   active?: boolean;
@@ -13,10 +12,9 @@ export interface SpellProps {
 }
 
 const Spell: React.FC<SpellProps> = ({
-  name,
   type,
-  active,
   power,
+  active,
   onClick,
 }: SpellProps) => {
   const { spellSlots, currentSlot } = useState();
@@ -24,26 +22,39 @@ const Spell: React.FC<SpellProps> = ({
 
   return (
     <div className={cx('spell', { active })} onClick={onClick}>
-      <p>{name}</p>
-      <p> {getSpellDescription(type, Math.ceil(power * slotPower))}</p>
+      <p>{type}</p>
+      <p>{getSpellDescription(type, power, Math.ceil(slotPower * power))}</p>
     </div>
   );
 };
 
-const getSpellDescription = (spellType: SpellType, power: number) => {
+const getSpellDescription = (
+  spellType: SpellType,
+  rawPower: number,
+  totalPower: number,
+) => {
   switch (spellType) {
-    case 'fireball': {
-      return `Deal ${power} damage to the enemy`;
+    case 'Fireball': {
+      return `Deal ${rawPower}(${totalPower}) damage to the enemy`;
     }
-    case 'lightning_strike': {
-      return `Deal ${Math.ceil(power * 0.85)} to the enemy and ${Math.ceil(
-        power * 0.25,
-      )} to another random one`;
+    case 'Lightning strike': {
+      return `Deal ${Math.ceil(rawPower * 0.85)} (${Math.ceil(
+        totalPower * 0.85,
+      )}) to the enemy and ${Math.ceil(rawPower * 0.25)} (${Math.ceil(
+        totalPower * 0.25,
+      )}) to another random one`;
     }
-    case 'shadow_bolt': {
-      return `Inflict one curse stack to the enemy and deal ${power} damage per each`;
+    case 'Shadow bolt': {
+      return `Inflict one curse stack to the enemy and deal ${rawPower} (${totalPower}) damage per each`;
     }
   }
+};
+
+export const createSpell = (type: SpellType, power: number): SpellProps => {
+  return {
+    type,
+    power,
+  };
 };
 
 export default Spell;

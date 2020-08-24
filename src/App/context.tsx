@@ -1,6 +1,6 @@
 import React, { ReactElement } from 'react';
 import { EnemyProps, EnemyAffliction, createEnemy } from './enemy';
-import { SpellProps, SpellType } from './spell';
+import { SpellProps, SpellType, createSpell } from './spell';
 import produce from 'immer';
 import { SpellSlotProps } from './spell-slot';
 
@@ -37,11 +37,11 @@ function reducer(state: State, action: Action) {
 
       const newEnemies = produce(enemies, (draftEnemies) => {
         switch (currentSpell) {
-          case 'fireball': {
+          case 'Fireball': {
             draftEnemies[target].health -= totalPower;
             break;
           }
-          case 'lightning_strike': {
+          case 'Lightning strike': {
             let secondTarget = Math.floor(Math.random() * draftEnemies.length);
             while (secondTarget === target) {
               secondTarget = Math.floor(Math.random() * draftEnemies.length);
@@ -51,7 +51,7 @@ function reducer(state: State, action: Action) {
             draftEnemies[secondTarget].health -= Math.ceil(totalPower * 0.25);
             break;
           }
-          case 'shadow_bolt': {
+          case 'Shadow bolt': {
             const curse = draftEnemies[target].afflictions.find(
               (a: EnemyAffliction) => a.type === 'curse',
             );
@@ -96,13 +96,13 @@ export function Provider({
   const [state, dispatch] = React.useReducer(reducer, {
     enemies: [createEnemy('Wolfie', 100), createEnemy('Jom', 50)],
     spells: [
-      { name: 'Fireball', type: 'fireball', power: 10 },
-      { name: 'Lightning  strike', type: 'lightning_strike', power: 8 },
-      { name: 'Shadow bolt', type: 'shadow_bolt', power: 6 },
+      createSpell('Fireball', 10),
+      createSpell('Lightning strike', 8),
+      createSpell('Shadow bolt', 6),
     ],
     spellSlots: [{ power: 1 }, { power: 1.2 }, { power: 1.45 }],
     currentSlot: 0,
-    currentSpell: 'fireball',
+    currentSpell: 'Fireball',
   });
 
   return (
