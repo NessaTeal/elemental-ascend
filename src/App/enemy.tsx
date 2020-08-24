@@ -37,4 +37,13 @@ const Enemy: React.FC<EnemyProps> = ({
   );
 };
 
+export const createEnemy = (name: string, health: number): EnemyProps => {
+  return {
+    name,
+    health,
+    maxHealth: health,
+    afflictions: [],
+  };
+};
+
 export default Enemy;
