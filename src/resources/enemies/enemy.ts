@@ -34,7 +34,7 @@ export type EnemyState = Required<MinimalEnemyState>;
 const enemies: EnemyStorage[] = [];
 
 function importAll(): void {
-  const modules = require.context('./data', true, /.*[^ts]$/);
+  const modules = require.context('./data', true, /.*(?!ts)$/);
   modules.keys().forEach((m) => {
     const [, levelStr, name] = m.split('/');
     const level = Number(levelStr);

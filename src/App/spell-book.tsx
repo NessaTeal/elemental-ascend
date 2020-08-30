@@ -1,9 +1,10 @@
 import React from 'react';
 import { useState, useDispatch } from './context';
 import Spell from './spell';
+import getSpell from '../resources/spells/spell';
 
 const SpellBook: React.FC = () => {
-  const { spells, currentSpell } = useState();
+  const { spells, spellSlots, currentSpell, currentSlot } = useState();
   const dispatch = useDispatch();
 
   return (
@@ -15,8 +16,12 @@ const SpellBook: React.FC = () => {
           <Spell
             key={index}
             {...s}
-            active={s.type === currentSpell}
-            onClick={() => dispatch({ type: 'changeSpell', spellType: s.type })}
+            active={s.name === currentSpell}
+            description={getSpell(s.name).description(
+              s,
+              spellSlots[currentSlot].power,
+            )}
+            onClick={() => dispatch({ type: 'changeSpell', spell: s.name })}
           />
         ))}
       </div>
