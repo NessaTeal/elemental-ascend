@@ -2,6 +2,7 @@ import React, { ReactElement } from 'react';
 import { SpellSlotProps } from './spell-slot';
 import getEnemy, { EnemyState } from '../resources/enemies/enemy';
 import getSpell, { SpellState } from '../resources/spells/spell';
+import getEncounter from '../resources/encounters/encounter';
 
 export interface State {
   enemies: EnemyState[];
@@ -63,7 +64,9 @@ export function Provider({
   children: React.ReactNode;
 }): ReactElement {
   const [state, dispatch] = React.useReducer(reducer, {
-    enemies: [getEnemy('wolfie').startingState, getEnemy('jom').startingState],
+    enemies: getEncounter(0).startingState.enemies.map(
+      (e) => getEnemy(e).startingState,
+    ),
     spells: [
       getSpell('Fireball').startingState,
       getSpell('Lightning strike').startingState,

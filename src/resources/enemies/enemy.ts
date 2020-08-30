@@ -46,7 +46,9 @@ function importAll(): void {
 importAll();
 
 export default function getEnemy(name: string): EnemyClass {
-  const enemyState = enemies.find((e) => e.name === name)?.enemy;
+  const enemyState = enemies.find(
+    (e) => e.name === name || e.enemy.startingState.name === name,
+  )?.enemy;
 
   if (!enemyState) {
     throw Error(`No entry found for enemy ${name}`);
