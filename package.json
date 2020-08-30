@@ -6,6 +6,7 @@
     "@types/classnames": "^2.2.10",
     "@types/react": "^16.9.0",
     "@types/react-dom": "^16.9.0",
+    "@types/webpack-env": "^1.15.2",
     "classnames": "^2.2.6",
     "http-server": "^0.12.3",
     "immer": "^7.0.7",

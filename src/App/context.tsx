@@ -1,8 +1,10 @@
 import React, { ReactElement } from 'react';
-import { EnemyProps, EnemyAffliction, createEnemy } from './enemy';
+import { EnemyProps } from './enemy';
 import { SpellProps, SpellType, createSpell } from './spell';
 import produce from 'immer';
 import { SpellSlotProps } from './spell-slot';
+import { EnemyAffliction } from '../resources/enemies/enemy';
+import getEnemy from '../resources/enemies/enemy';
 
 interface State {
   enemies: EnemyProps[];
@@ -94,7 +96,7 @@ export function Provider({
   children: React.ReactNode;
 }): ReactElement {
   const [state, dispatch] = React.useReducer(reducer, {
-    enemies: [createEnemy('Wolfie', 100), createEnemy('Jom', 50)],
+    enemies: [getEnemy('wolfie').startingState, getEnemy('jom').startingState],
     spells: [
       createSpell('Fireball', 10),
       createSpell('Lightning strike', 8),
