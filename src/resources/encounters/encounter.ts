@@ -1,11 +1,6 @@
-export abstract class Encounter {
-  constructor(state: MinimalEncounterState) {
-    this.startingState = {
-      ...state,
-    };
-  }
+export type Encounter = {
   startingState: EncounterState;
-}
+};
 
 export type EncounterStorage = {
   name: string;
@@ -13,19 +8,17 @@ export type EncounterStorage = {
   encounter: Encounter;
 };
 
-type MinimalEncounterState = {
+export type EncounterState = {
   enemies: string[];
 };
-
-export type EncounterState = Required<MinimalEncounterState>;
 
 const encounters: EncounterStorage[] = [];
 
 function importAll(): void {
-  const modules = require.context('./data', true, /.*(?!ts)$/);
+  const modules = require.context('./data', true, /.*json$/);
   modules.keys().forEach((m) => {
     const [, levelStr, name] = m.split('/');
-    const encounter = modules(m).default();
+    const encounter = modules(m);
     const level = Number(levelStr);
     encounters.push({ name, level, encounter });
   });
