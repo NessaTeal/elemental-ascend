@@ -1,5 +1,5 @@
 import React, { ReactElement } from 'react';
-import { SpellSlotProps } from './spell-slot';
+import { SpellSlotProps } from './components/spell-slot';
 import getEnemy, { EnemyState } from '../resources/enemies/enemy';
 import getSpell, { SpellState } from '../resources/spells/spell';
 import getEncounter from '../resources/encounters/encounter';

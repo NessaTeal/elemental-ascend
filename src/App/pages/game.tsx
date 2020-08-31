@@ -1,7 +1,7 @@
 import React from 'react';
-import Enemies from '../enemies';
-import SpellChain from '../spell-chain';
-import SpellBook from '../spell-book';
+import Enemies from '../components/enemies';
+import SpellChain from '../components/spell-chain';
+import SpellBook from '../components/spell-book';
 
 const Game: React.FC = () => {
   return (

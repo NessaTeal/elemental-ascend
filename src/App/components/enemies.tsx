@@ -1,5 +1,5 @@
 import React from 'react';
-import { useState, useDispatch } from './context';
+import { useState, useDispatch } from '../context';
 import Enemy from './enemy';
 
 const Enemies: React.FC = () => {
