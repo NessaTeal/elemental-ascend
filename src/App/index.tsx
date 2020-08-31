@@ -1,15 +1,22 @@
 import React from 'react';
 import './style.css';
-import SpellBook from './spell-book';
-import SpellChain from './spell-chain';
-import Enemies from './enemies';
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import MainMenu from './pages/main-menu';
+import Game from './pages/game';
 
 const App: React.FC = () => {
   return (
     <div className="App">
-      <Enemies />
-      <SpellChain />
-      <SpellBook />
+      <Router>
+        <Switch>
+          <Route exact path="/">
+            <MainMenu />
+          </Route>
+          <Route path="/game">
+            <Game />
+          </Route>
+        </Switch>
+      </Router>
     </div>
   );
 };
