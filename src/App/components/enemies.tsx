@@ -1,6 +1,7 @@
 import React from 'react';
 import { useState, useDispatch } from '../context';
 import Enemy from './enemy';
+import getEnemy from '../../resources/enemies/enemy';
 
 const Enemies: React.FC = () => {
   const { enemies } = useState();
@@ -17,6 +18,7 @@ const Enemies: React.FC = () => {
           <Enemy
             key={index}
             {...e}
+            actionDescription={getEnemy(e.name).getActionDescription(e)}
             onClick={() => dispatch({ type: 'castSpell', target: index })}
           />
         ))}

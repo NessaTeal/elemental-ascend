@@ -5,6 +5,7 @@ import getSpell, { SpellState } from '../resources/spells/spell';
 import getEncounter from '../resources/encounters/encounter';
 
 export interface State {
+  playerHealth: number;
   enemies: EnemyState[];
   spells: SpellState[];
   spellSlots: SpellSlotProps[];
@@ -28,7 +29,7 @@ const DispatchContext = React.createContext<Dispatch | undefined>(undefined);
 function reducer(state: State, action: Action) {
   switch (action.type) {
     case 'castSpell': {
-      const { spells, spellSlots, currentSlot, currentSpell } = state;
+      const { spells, spellSlots, currentSlot, currentSpell, enemies } = state;
       const spellState = spells.find((s) => s.name === currentSpell);
 
       if (!spellState) {
@@ -37,15 +38,19 @@ function reducer(state: State, action: Action) {
 
       const slotPower = spellSlots[currentSlot].power;
 
-      const newState = getSpell(currentSpell).cast(
+      const afterCastState = getSpell(currentSpell).cast(
         action,
         state,
         spellState,
         slotPower,
       );
 
+      const afterEnemiesState = enemies.reduce((acc, cur) => {
+        return getEnemy(cur.name).act(acc, cur);
+      }, afterCastState);
+
       return {
-        ...newState,
+        ...afterEnemiesState,
         currentSlot: currentSlot === spells.length - 1 ? 0 : currentSlot + 1,
       };
     }
@@ -64,6 +69,7 @@ export function Provider({
   children: React.ReactNode;
 }): ReactElement {
   const [state, dispatch] = React.useReducer(reducer, {
+    playerHealth: 100,
     enemies: getEncounter(0).startingState.enemies.map(
       (e) => getEnemy(e).startingState,
     ),

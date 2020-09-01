@@ -1,6 +1,6 @@
 .enemy {
-  width: 100px;
-  height: 140px;
+  width: 200px;
+  height: 240px;
   margin: 10px;
   background: green;
   color: white;
@@ -44,6 +44,8 @@
 .enemy .mid {
   flex: 4;
   display: flex;
+  flex-direction: column;
+  justify-content: center;
   align-items: center;
 }
 
