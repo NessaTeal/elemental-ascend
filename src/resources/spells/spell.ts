@@ -16,39 +16,9 @@ export abstract class SpellClass {
   startingState: SpellState;
 }
 
-export type SpellStorage = {
-  name: string;
-  spell: SpellClass;
-};
-
 type MinimalSpellState = {
   name: string;
   power: number;
 };
 
 export type SpellState = Required<MinimalSpellState>;
-
-const spells: SpellStorage[] = [];
-
-function importAll(): void {
-  const modules = require.context('./data', true, /.*(?!ts)$/);
-  modules.keys().forEach((m) => {
-    const [, name] = m.split('/');
-    const spell = modules(m).default();
-    spells.push({ name, spell });
-  });
-}
-
-importAll();
-
-export default function getSpell(name: string): SpellClass {
-  const spell = spells.find(
-    (s) => s.name === name || s.spell.startingState.name === name,
-  )?.spell;
-
-  if (!spell) {
-    throw Error(`No entry found for spell ${name}`);
-  }
-
-  return spell;
-}

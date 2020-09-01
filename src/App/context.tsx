@@ -1,8 +1,8 @@
 import React, { ReactElement } from 'react';
 import { SpellSlotProps } from './components/spell-slot';
-import getEnemy, { EnemyState } from '../resources/enemies/enemy';
-import getSpell, { SpellState } from '../resources/spells/spell';
-import getEncounter from '../resources/encounters/encounter';
+import { EnemyState } from '../resources/enemies/enemy';
+import { SpellState } from '../resources/spells/spell';
+import importAll, { getSpell, getEnemy, getEncounter } from '../resources';
 
 export interface State {
   playerHealth: number;
@@ -68,6 +68,7 @@ export function Provider({
 }: {
   children: React.ReactNode;
 }): ReactElement {
+  importAll();
   const [state, dispatch] = React.useReducer(reducer, {
     playerHealth: 100,
     enemies: getEncounter(0).startingState.enemies.map(

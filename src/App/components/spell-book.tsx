@@ -1,7 +1,7 @@
 import React from 'react';
 import { useState, useDispatch } from '../context';
 import Spell from './spell';
-import getSpell from '../../resources/spells/spell';
+import { getSpell } from '../../resources';
 
 const SpellBook: React.FC = () => {
   const { spells, spellSlots, currentSpell, currentSlot } = useState();

@@ -1,7 +1,7 @@
 import React from 'react';
 import { useState, useDispatch } from '../context';
 import Enemy from './enemy';
-import getEnemy from '../../resources/enemies/enemy';
+import { getEnemy } from '../../resources';
 
 const Enemies: React.FC = () => {
   const { enemies } = useState();
