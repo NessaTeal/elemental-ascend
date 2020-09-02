@@ -4,10 +4,10 @@ import produce from 'immer';
 export abstract class EnemyClass {
   constructor(state: MinimalEnemyState) {
     this.startingState = {
+      currentAction: 0,
+      maxHealth: state.health,
+      afflictions: [],
       ...state,
-      currentAction: state.currentAction ?? 0,
-      maxHealth: state.maxHealth ?? state.health,
-      afflictions: state.afflictions ?? [],
     };
   }
 
