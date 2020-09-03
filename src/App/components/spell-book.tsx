@@ -20,7 +20,7 @@ const SpellBook: React.FC = () => {
             active={s.name === currentSpell}
             description={getSpell(s.name)
               .getActionWrapper()
-              .getDescription(state)}
+              .getDescription(state, spells[index])}
             onClick={() => dispatch({ type: 'changeSpell', spell: s.name })}
           />
         ))}

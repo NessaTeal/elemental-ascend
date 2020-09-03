@@ -1,4 +1,4 @@
-import { SpellClass } from '../spell';
+import { SpellClass, SpellState } from '../spell';
 import { CastSpellAction, State } from '../../../App/context';
 import produce from 'immer';
 import { GameAnimation, LightningStrikeAnimation } from '../../animations';
@@ -15,9 +15,8 @@ class LightningStrike extends SpellClass {
     return new LightningStrikeAnimation(action, state);
   }
 
-  getDescription(state: State) {
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    const { power } = state.spells.find((s) => s.name === state.currentSpell)!;
+  getDescription(state: State, spellState: SpellState) {
+    const { power } = spellState;
     const slotPower = state.spellSlots[state.currentSlot].power;
 
     return `Deal ${Math.ceil(power * 0.85)} (${Math.ceil(

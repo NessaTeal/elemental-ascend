@@ -14,7 +14,10 @@ export abstract class SpellClass {
     state: State,
   ): GameAnimation;
 
-  protected abstract getDescription(state: State): string;
+  protected abstract getDescription(
+    state: State,
+    spellState: SpellState,
+  ): string;
 
   protected abstract getAction(action: CastSpellAction, state: State): State;
 
