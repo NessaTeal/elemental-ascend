@@ -1,4 +1,5 @@
 import { CastSpellAction, State } from '../../App/context';
+import { GameAnimation } from '../animations';
 
 export abstract class SpellClass {
   constructor(state: MinimalSpellState) {
@@ -6,6 +7,7 @@ export abstract class SpellClass {
       ...state,
     };
   }
+  abstract getAnimation(action: CastSpellAction, state: State): GameAnimation;
   abstract cast(
     action: CastSpellAction,
     gameState: State,

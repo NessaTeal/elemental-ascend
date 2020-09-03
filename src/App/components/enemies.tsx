@@ -1,10 +1,12 @@
 import React from 'react';
-import { useState, useDispatch } from '../context';
+import { useState, useDispatch, CastSpellAction } from '../context';
 import Enemy from './enemy';
-import { getEnemy } from '../../resources';
+import { getEnemy, getSpell } from '../../resources';
+import { executeAnimatedAction } from '../../resources/actions';
 
 const Enemies: React.FC = () => {
-  const { enemies } = useState();
+  const state = useState();
+  const { enemies, currentSpell } = state;
   const dispatch = useDispatch();
 
   return (
@@ -14,14 +16,18 @@ const Enemies: React.FC = () => {
         Click an enemy to cast currently selected spell with the current slot
       </p>
       <div className="enemies">
-        {enemies.map((e, index) => (
-          <Enemy
-            key={index}
-            {...e}
-            actionDescription={getEnemy(e.name).getActionDescription(e)}
-            onClick={() => dispatch({ type: 'castSpell', target: index })}
-          />
-        ))}
+        {enemies.map((e, index) => {
+          const action: CastSpellAction = { type: 'castSpell', target: index };
+          const animation = getSpell(currentSpell).getAnimation(action, state);
+          return (
+            <Enemy
+              key={index}
+              {...e}
+              actionDescription={getEnemy(e.name).getActionDescription(e)}
+              onClick={() => executeAnimatedAction(animation, action, dispatch)}
+            />
+          );
+        })}
       </div>
     </>
   );

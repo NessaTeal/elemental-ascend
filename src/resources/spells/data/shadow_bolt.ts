@@ -2,6 +2,7 @@ import { SpellClass, SpellState } from '../spell';
 import { CastSpellAction, State } from '../../../App/context';
 import produce from 'immer';
 import { EnemyAffliction } from '../../enemies/enemy';
+import { GameAnimation, ShadowBoltAnimation } from '../../animations';
 
 class ShadowBolt extends SpellClass {
   constructor() {
@@ -9,6 +10,10 @@ class ShadowBolt extends SpellClass {
       name: 'Shadow bolt',
       power: 6,
     });
+  }
+
+  getAnimation(action: CastSpellAction, state: State): GameAnimation {
+    return new ShadowBoltAnimation(action, state);
   }
 
   cast(

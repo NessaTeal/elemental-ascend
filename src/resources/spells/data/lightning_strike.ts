@@ -1,6 +1,7 @@
 import { SpellClass, SpellState } from '../spell';
 import { CastSpellAction, State } from '../../../App/context';
 import produce from 'immer';
+import { GameAnimation, LightningStrikeAnimation } from '../../animations';
 
 class LightningStrike extends SpellClass {
   constructor() {
@@ -8,6 +9,10 @@ class LightningStrike extends SpellClass {
       name: 'Lightning strike',
       power: 8,
     });
+  }
+
+  getAnimation(action: CastSpellAction, state: State): GameAnimation {
+    return new LightningStrikeAnimation(action, state);
   }
 
   cast(
