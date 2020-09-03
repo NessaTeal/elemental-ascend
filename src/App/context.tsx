@@ -71,9 +71,7 @@ export function Provider({
   importAll();
   const [state, dispatch] = React.useReducer(reducer, {
     playerHealth: 100,
-    enemies: getEncounter(0).startingState.enemies.map(
-      (e) => getEnemy(e).startingState,
-    ),
+    enemies: getEncounter(0).enemies.map((e) => getEnemy(e).startingState),
     spells: [
       getSpell('Fireball').startingState,
       getSpell('Lightning strike').startingState,

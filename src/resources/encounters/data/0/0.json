@@ -1,5 +1,3 @@
 {
-  "startingState": {
-    "enemies": ["Wolfie", "Jom"]
-  }
+  "enemies": ["Wolfie", "Jom"]
 }

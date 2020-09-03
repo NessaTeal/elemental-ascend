@@ -49,3 +49,23 @@ type MinimalEnemyState = {
 };
 
 export type EnemyState = Required<MinimalEnemyState>;
+
+export type EnemyStorage = {
+  name: string;
+  level: number;
+  enemy: EnemyClass;
+};
+
+export default function importEnemies(): EnemyStorage[] {
+  const modules = require.context('./data', true, /.*(?!ts)$/);
+  const enemies: EnemyStorage[] = [];
+
+  modules.keys().forEach((m) => {
+    const [, levelStr, name] = m.split('/');
+    const level = Number(levelStr);
+    const enemy = modules(m).default();
+    enemies.push({ name, level, enemy });
+  });
+
+  return enemies;
+}

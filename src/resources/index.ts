@@ -1,22 +1,11 @@
-import { SpellClass } from './spells/spell';
-import { EnemyClass } from './enemies/enemy';
-import { Encounter } from './encounters/encounter';
+import importSpells, { SpellClass, SpellStorage } from './spells/spell';
+import importEnemies, { EnemyClass, EnemyStorage } from './enemies/enemy';
+import importEncounters, {
+  Encounter,
+  EncounterStorage,
+} from './encounters/encounter';
 
-type SpellStorage = {
-  name: string;
-  spell: SpellClass;
-};
-
-const spells: SpellStorage[] = [];
-
-function importSpells(): void {
-  const modules = require.context('./spells/data', true, /.*(?!ts)$/);
-  modules.keys().forEach((m) => {
-    const [, name] = m.split('/');
-    const spell = modules(m).default();
-    spells.push({ name, spell });
-  });
-}
+let spells: SpellStorage[] = [];
 
 export function getSpell(name: string): SpellClass {
   const spell = spells.find(
@@ -30,23 +19,7 @@ export function getSpell(name: string): SpellClass {
   return spell;
 }
 
-type EnemyStorage = {
-  name: string;
-  level: number;
-  enemy: EnemyClass;
-};
-
-const enemies: EnemyStorage[] = [];
-
-function importEnemies(): void {
-  const modules = require.context('./enemies/data', true, /.*(?!ts)$/);
-  modules.keys().forEach((m) => {
-    const [, levelStr, name] = m.split('/');
-    const level = Number(levelStr);
-    const enemy = modules(m).default();
-    enemies.push({ name, level, enemy });
-  });
-}
+let enemies: EnemyStorage[] = [];
 
 export function getEnemy(name: string): EnemyClass {
   const enemyState = enemies.find(
@@ -60,23 +33,7 @@ export function getEnemy(name: string): EnemyClass {
   return enemyState;
 }
 
-type EncounterStorage = {
-  name: string;
-  level: number;
-  encounter: Encounter;
-};
-
-const encounters: EncounterStorage[] = [];
-
-function importEncounters(): void {
-  const modules = require.context('./encounters/data', true, /.*json$/);
-  modules.keys().forEach((m) => {
-    const [, levelStr, name] = m.split('/');
-    const encounter = modules(m);
-    const level = Number(levelStr);
-    encounters.push({ name, level, encounter });
-  });
-}
+let encounters: EncounterStorage[] = [];
 
 export function getEncounter(level: number): Encounter {
   const possibleEncounters = encounters
@@ -93,7 +50,7 @@ export function getEncounter(level: number): Encounter {
 }
 
 export default function importAll(): void {
-  importEnemies();
-  importSpells();
-  importEncounters();
+  enemies = importEnemies();
+  spells = importSpells();
+  encounters = importEncounters();
 }

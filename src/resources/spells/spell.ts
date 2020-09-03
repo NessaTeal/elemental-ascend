@@ -22,3 +22,21 @@ type MinimalSpellState = {
 };
 
 export type SpellState = Required<MinimalSpellState>;
+
+export type SpellStorage = {
+  name: string;
+  spell: SpellClass;
+};
+
+export default function importSpells(): SpellStorage[] {
+  const modules = require.context('./data', true, /.*(?!ts)$/);
+  const spells: SpellStorage[] = [];
+
+  modules.keys().forEach((m) => {
+    const [, name] = m.split('/');
+    const spell = modules(m).default();
+    spells.push({ name, spell });
+  });
+
+  return spells;
+}
