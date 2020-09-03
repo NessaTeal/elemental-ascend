@@ -17,11 +17,11 @@ const SpellBook: React.FC = () => {
           <Spell
             key={index}
             {...s}
-            active={s.name === currentSpell}
+            active={index === currentSpell}
             description={getSpell(s.name)
               .getActionWrapper()
               .getDescription(state, spells[index])}
-            onClick={() => dispatch({ type: 'changeSpell', spell: s.name })}
+            onClick={() => dispatch({ type: 'changeSpell', spell: index })}
           />
         ))}
       </div>

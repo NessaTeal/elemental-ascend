@@ -15,7 +15,7 @@ export interface State {
   spells: SpellState[];
   spellSlots: SpellSlotState[];
   currentSlot: number;
-  currentSpell: string;
+  currentSpell: number;
 }
 const StateContext = React.createContext<State | undefined>(undefined);
 
@@ -27,7 +27,7 @@ export type CastSpellAction = {
 };
 export type ChangeSpellAction = {
   type: 'changeSpell';
-  spell: string;
+  spell: number;
 };
 const DispatchContext = React.createContext<Dispatch | undefined>(undefined);
 
@@ -35,13 +35,9 @@ function reducer(state: State, action: Action) {
   switch (action.type) {
     case 'castSpell': {
       const { spells, currentSlot, currentSpell, enemies } = state;
-      const spellState = spells.find((s) => s.name === currentSpell);
+      const { name } = spells[currentSpell];
 
-      if (!spellState) {
-        throw Error(`Trying to cast non-existing spell ${currentSpell}`);
-      }
-
-      const afterCastState = getSpell(currentSpell)
+      const afterCastState = getSpell(name)
         .getActionWrapper()
         .getAction(action, state);
 
@@ -79,7 +75,7 @@ export function Provider({
     ],
     spellSlots: getStartingSpellSlots(),
     currentSlot: 0,
-    currentSpell: 'Fireball',
+    currentSpell: 0,
   });
 
   return (

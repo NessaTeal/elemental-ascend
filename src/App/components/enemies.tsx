@@ -6,7 +6,7 @@ import { executeAnimatedAction } from '../../resources/actions';
 
 const Enemies: React.FC = () => {
   const state = useState();
-  const { enemies, currentSpell } = state;
+  const { enemies, spells, currentSpell } = state;
   const dispatch = useDispatch();
 
   return (
@@ -18,7 +18,7 @@ const Enemies: React.FC = () => {
       <div className="enemies">
         {enemies.map((e, index) => {
           const action: CastSpellAction = { type: 'castSpell', target: index };
-          const animation = getSpell(currentSpell)
+          const animation = getSpell(spells[currentSpell].name)
             .getActionWrapper()
             .getAnimation(action, state);
           return (

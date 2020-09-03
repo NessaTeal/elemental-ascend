@@ -27,8 +27,7 @@ class ShadowBolt extends SpellClass {
 
   getAction(action: CastSpellAction, state: State): State {
     const { target } = action;
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    const { power } = state.spells.find((s) => s.name === state.currentSpell)!;
+    const { power } = state.spells[state.currentSpell];
     const slotPower = state.spellSlots[state.currentSlot].power;
     const totalPower = Math.ceil(power * slotPower);
 
