@@ -1,4 +1,4 @@
-import { SpellClass, SpellState } from '../spell';
+import { SpellClass } from '../spell';
 import { CastSpellAction, State } from '../../../App/context';
 import produce from 'immer';
 import { GameAnimation, FireballAnimation } from '../../animations';
@@ -15,26 +15,26 @@ class Fireball extends SpellClass {
     return new FireballAnimation(action, state);
   }
 
-  cast(
-    action: CastSpellAction,
-    state: State,
-    spellState: SpellState,
-    slotPower: number,
-  ): State {
+  getDescription(state: State) {
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    const { power } = state.spells.find((s) => s.name === state.currentSpell)!;
+    const slotPower = state.spellSlots[state.currentSlot].power;
+
+    return `Deal ${power} (${Math.ceil(
+      power * slotPower,
+    )}) damage to the enemy`;
+  }
+
+  getAction(action: CastSpellAction, state: State): State {
     const { target } = action;
-    const { power } = spellState;
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    const { power } = state.spells.find((s) => s.name === state.currentSpell)!;
+    const slotPower = state.spellSlots[state.currentSlot].power;
     const totalPower = Math.ceil(power * slotPower);
 
     return produce(state, (draftState) => {
       draftState.enemies[target].health -= totalPower;
     });
-  }
-
-  description(spellState: SpellState, slotPower: number): string {
-    const { power } = spellState;
-    return `Deal ${power} (${Math.ceil(
-      power * slotPower,
-    )}) damage to the enemy`;
   }
 }
 

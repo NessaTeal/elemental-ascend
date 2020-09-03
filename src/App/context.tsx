@@ -34,21 +34,16 @@ const DispatchContext = React.createContext<Dispatch | undefined>(undefined);
 function reducer(state: State, action: Action) {
   switch (action.type) {
     case 'castSpell': {
-      const { spells, spellSlots, currentSlot, currentSpell, enemies } = state;
+      const { spells, currentSlot, currentSpell, enemies } = state;
       const spellState = spells.find((s) => s.name === currentSpell);
 
       if (!spellState) {
         throw Error(`Trying to cast non-existing spell ${currentSpell}`);
       }
 
-      const slotPower = spellSlots[currentSlot].power;
-
-      const afterCastState = getSpell(currentSpell).cast(
-        action,
-        state,
-        spellState,
-        slotPower,
-      );
+      const afterCastState = getSpell(currentSpell)
+        .getActionWrapper()
+        .getAction(action, state);
 
       const afterEnemiesState = enemies.reduce((acc, cur) => {
         return getEnemy(cur.name).act(acc, cur);

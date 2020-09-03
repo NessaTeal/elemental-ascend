@@ -1,4 +1,4 @@
-import { SpellClass, SpellState } from '../spell';
+import { SpellClass } from '../spell';
 import { CastSpellAction, State } from '../../../App/context';
 import produce from 'immer';
 import { EnemyAffliction } from '../../enemies/enemy';
@@ -16,21 +16,22 @@ class ShadowBolt extends SpellClass {
     return new ShadowBoltAnimation(action, state);
   }
 
-  cast(
-    action: CastSpellAction,
-    state: State,
-    spellState: SpellState,
-    slotPower: number,
-  ): State {
-    const { target } = action;
-    const { power } = spellState;
-    const { enemies } = state;
-    const totalPower = Math.ceil(power * slotPower);
+  getDescription(state: State) {
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    const { power } = state.spells.find((s) => s.name === state.currentSpell)!;
+    const slotPower = state.spellSlots[state.currentSlot].power;
 
-    let secondTarget = Math.floor(Math.random() * enemies.length);
-    while (secondTarget === target) {
-      secondTarget = Math.floor(Math.random() * enemies.length);
-    }
+    return `Inflict one curse stack to the enemy and deal ${power} (${Math.ceil(
+      power * slotPower,
+    )}) damage per each`;
+  }
+
+  getAction(action: CastSpellAction, state: State): State {
+    const { target } = action;
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    const { power } = state.spells.find((s) => s.name === state.currentSpell)!;
+    const slotPower = state.spellSlots[state.currentSlot].power;
+    const totalPower = Math.ceil(power * slotPower);
 
     return produce(state, (draftState) => {
       const curse = draftState.enemies[target].afflictions.find(
@@ -50,14 +51,6 @@ class ShadowBolt extends SpellClass {
 
       draftState.enemies[target].health -= totalPower * stacks;
     });
-  }
-
-  description(spellState: SpellState, slotPower: number): string {
-    const { power } = spellState;
-
-    return `Inflict one curse stack to the enemy and deal ${power} (${Math.ceil(
-      power * slotPower,
-    )}) damage per each`;
   }
 }
 

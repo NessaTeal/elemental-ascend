@@ -1,4 +1,4 @@
-import { SpellClass, SpellState } from '../spell';
+import { SpellClass } from '../spell';
 import { CastSpellAction, State } from '../../../App/context';
 import produce from 'immer';
 import { GameAnimation, LightningStrikeAnimation } from '../../animations';
@@ -15,16 +15,25 @@ class LightningStrike extends SpellClass {
     return new LightningStrikeAnimation(action, state);
   }
 
-  cast(
-    action: CastSpellAction,
-    state: State,
-    spellState: SpellState,
-    slotPower: number,
-  ): State {
+  getDescription(state: State) {
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    const { power } = state.spells.find((s) => s.name === state.currentSpell)!;
+    const slotPower = state.spellSlots[state.currentSlot].power;
+
+    return `Deal ${Math.ceil(power * 0.85)} (${Math.ceil(
+      power * slotPower * 0.85,
+    )}) to the enemy and ${Math.ceil(power * 0.25)} (${Math.ceil(
+      power * slotPower * 0.25,
+    )}) to another random one`;
+  }
+
+  getAction(action: CastSpellAction, state: State): State {
     const { target } = action;
-    const { power } = spellState;
-    const { enemies } = state;
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    const { power } = state.spells.find((s) => s.name === state.currentSpell)!;
+    const slotPower = state.spellSlots[state.currentSlot].power;
     const totalPower = Math.ceil(power * slotPower);
+    const { enemies } = state;
 
     let secondTarget = Math.floor(Math.random() * enemies.length);
     while (secondTarget === target) {
@@ -35,16 +44,6 @@ class LightningStrike extends SpellClass {
       draftState.enemies[target].health -= Math.ceil(totalPower * 0.85);
       draftState.enemies[secondTarget].health -= Math.ceil(totalPower * 0.25);
     });
-  }
-
-  description(spellState: SpellState, slotPower: number): string {
-    const { power } = spellState;
-
-    return `Deal ${Math.ceil(power * 0.85)} (${Math.ceil(
-      power * slotPower * 0.85,
-    )}) to the enemy and ${Math.ceil(power * 0.25)} (${Math.ceil(
-      power * slotPower * 0.25,
-    )}) to another random one`;
   }
 }
 

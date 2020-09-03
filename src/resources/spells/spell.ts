@@ -1,5 +1,6 @@
 import { CastSpellAction, State } from '../../App/context';
 import { GameAnimation } from '../animations';
+import { CastSpellActionWrapper } from '../actions';
 
 export abstract class SpellClass {
   constructor(state: MinimalSpellState) {
@@ -7,15 +8,24 @@ export abstract class SpellClass {
       ...state,
     };
   }
-  abstract getAnimation(action: CastSpellAction, state: State): GameAnimation;
-  abstract cast(
+
+  protected abstract getAnimation(
     action: CastSpellAction,
-    gameState: State,
-    spellState: SpellState,
-    slotPower: number,
-  ): State;
-  abstract description(spellState: SpellState, slotPower: number): string;
+    state: State,
+  ): GameAnimation;
+
+  protected abstract getDescription(state: State): string;
+
+  protected abstract getAction(action: CastSpellAction, state: State): State;
+
   startingState: SpellState;
+  getActionWrapper(): CastSpellActionWrapper {
+    return {
+      getAnimation: this.getAnimation,
+      getDescription: this.getDescription,
+      getAction: this.getAction,
+    };
+  }
 }
 
 type MinimalSpellState = {

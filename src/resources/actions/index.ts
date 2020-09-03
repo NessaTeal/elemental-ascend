@@ -1,5 +1,5 @@
 import { GameAnimation } from '../animations';
-import { Action } from '../../App/context';
+import { Action, State, CastSpellAction } from '../../App/context';
 
 export async function executeAnimatedAction(
   animation: GameAnimation,
@@ -9,3 +9,9 @@ export async function executeAnimatedAction(
   await animation.perform();
   dispatch(action);
 }
+
+export type CastSpellActionWrapper = {
+  getAnimation: (action: CastSpellAction, state: State) => GameAnimation;
+  getDescription: (state: State) => string;
+  getAction: (action: CastSpellAction, state: State) => State;
+};
