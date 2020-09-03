@@ -1,8 +1,8 @@
 import React from 'react';
 import cx from 'classnames';
+import { SpellSlotState } from '../../resources/spell-slots/spell-slot';
 
-export interface SpellSlotProps {
-  power: number;
+export interface SpellSlotProps extends SpellSlotState {
   active?: boolean;
 }
 

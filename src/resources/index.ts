@@ -4,6 +4,10 @@ import importEncounters, {
   Encounter,
   EncounterStorage,
 } from './encounters/encounter';
+import importspellSlots, {
+  SpellSlotStorage,
+  SpellSlotState,
+} from './spell-slots/spell-slot';
 
 let spells: SpellStorage[] = [];
 
@@ -49,8 +53,15 @@ export function getEncounter(level: number): Encounter {
   return possibleEncounters[Math.floor(Math.random() * amount)];
 }
 
+let spellSlots: SpellSlotStorage[] = [];
+
+export function getStartingSpellSlots(): SpellSlotState[] {
+  return spellSlots.filter((s) => s.starting).map((s) => s.spellSlot);
+}
+
 export default function importAll(): void {
   enemies = importEnemies();
   spells = importSpells();
   encounters = importEncounters();
+  spellSlots = importspellSlots();
 }

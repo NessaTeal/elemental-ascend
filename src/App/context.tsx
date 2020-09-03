@@ -1,14 +1,19 @@
 import React, { ReactElement } from 'react';
-import { SpellSlotProps } from './components/spell-slot';
 import { EnemyState } from '../resources/enemies/enemy';
 import { SpellState } from '../resources/spells/spell';
-import importAll, { getSpell, getEnemy, getEncounter } from '../resources';
+import importAll, {
+  getSpell,
+  getEnemy,
+  getEncounter,
+  getStartingSpellSlots,
+} from '../resources';
+import { SpellSlotState } from '../resources/spell-slots/spell-slot';
 
 export interface State {
   playerHealth: number;
   enemies: EnemyState[];
   spells: SpellState[];
-  spellSlots: SpellSlotProps[];
+  spellSlots: SpellSlotState[];
   currentSlot: number;
   currentSpell: string;
 }
@@ -77,7 +82,7 @@ export function Provider({
       getSpell('Lightning strike').startingState,
       getSpell('Shadow bolt').startingState,
     ],
-    spellSlots: [{ power: 1 }, { power: 1.2 }, { power: 1.45 }],
+    spellSlots: getStartingSpellSlots(),
     currentSlot: 0,
     currentSpell: 'Fireball',
   });
