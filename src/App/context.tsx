@@ -37,9 +37,7 @@ function reducer(state: State, action: Action) {
       const { spells, currentSlot, currentSpell, enemies } = state;
       const { name } = spells[currentSpell];
 
-      const afterCastState = getSpell(name)
-        .getActionWrapper()
-        .getAction(action, state);
+      const afterCastState = getSpell(name).getAction(action, state);
 
       const afterEnemiesState = enemies.reduce((acc, cur) => {
         return getEnemy(cur.name).act(acc, cur);

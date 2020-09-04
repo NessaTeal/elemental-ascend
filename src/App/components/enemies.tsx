@@ -18,9 +18,10 @@ const Enemies: React.FC = () => {
       <div className="enemies">
         {enemies.map((e, index) => {
           const action: CastSpellAction = { type: 'castSpell', target: index };
-          const animation = getSpell(spells[currentSpell].name)
-            .getActionWrapper()
-            .getAnimation(action, state);
+          const animation = getSpell(spells[currentSpell].name).getAnimation(
+            action,
+            state,
+          );
           return (
             <Enemy
               key={index}
