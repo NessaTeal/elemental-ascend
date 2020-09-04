@@ -2,11 +2,11 @@ import React from 'react';
 import { useState, useDispatch, CastSpellAction } from '../context';
 import Enemy from './enemy';
 import { getEnemy, getSpell } from '../../resources';
-import { executeAnimatedAction } from '../../resources/actions';
+import { makeATurn } from '../../resources/actions';
 
 const Enemies: React.FC = () => {
   const state = useState();
-  const { enemies, spells, currentSpell } = state;
+  const { enemies, spells, currentSpell, playerTurn } = state;
   const dispatch = useDispatch();
 
   return (
@@ -26,8 +26,14 @@ const Enemies: React.FC = () => {
             <Enemy
               key={index}
               {...e}
-              actionDescription={getEnemy(e.name).getActionDescription(e)}
-              onClick={() => executeAnimatedAction(animation, action, dispatch)}
+              actionDescription={getEnemy(e.name)
+                .getActionWrappers()
+                [e.currentAction].getDescription(state, e)}
+              onClick={() => {
+                if (playerTurn) {
+                  makeATurn(animation, action, dispatch);
+                }
+              }}
             />
           );
         })}

@@ -1,5 +1,6 @@
-import { State } from '../../App/context';
+import { State, EnemyAction } from '../../App/context';
 import produce from 'immer';
+import { EnemyActionWrapper } from '../actions';
 
 export abstract class EnemyClass {
   constructor(state: MinimalEnemyState) {
@@ -10,29 +11,22 @@ export abstract class EnemyClass {
       ...state,
     };
   }
-
-  act(state: State, enemyState: EnemyState): State {
-    const { currentAction } = enemyState;
+  act(action: EnemyAction, state: State): State {
+    const { currentAction } = state.enemies[action.enemy];
     return produce(state, (draftState) => {
-      const possibleActions = this.getPossibleActions();
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      const draftEnemyState = draftState.enemies.find(
-        (e) => e.name === enemyState.name,
-      )!;
-      possibleActions[currentAction](draftState, draftEnemyState);
+      const possibleActions = this.getActionWrappers().map((w) =>
+        w.getAction(action),
+      );
+      const draftEnemyState = draftState.enemies[action.enemy];
+      possibleActions[currentAction](draftState);
       draftEnemyState.currentAction++;
       draftEnemyState.currentAction %= possibleActions.length;
     });
   }
-  // define mutations that are free to modify either state
-  abstract getPossibleActions(): ((
-    state: State,
-    enemyState: EnemyState,
-  ) => void)[];
-  abstract getActionDescription(enemyState: EnemyState): string;
 
-  level!: number;
   startingState!: EnemyState;
+
+  abstract getActionWrappers(): EnemyActionWrapper[];
 }
 
 export type EnemyAffliction = {
