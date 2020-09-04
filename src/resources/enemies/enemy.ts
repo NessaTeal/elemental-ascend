@@ -14,13 +14,11 @@ export abstract class EnemyClass {
   act(action: EnemyAction, state: State): State {
     const { currentAction } = state.enemies[action.enemy];
     return produce(state, (draftState) => {
-      const possibleActions = this.getActionWrappers().map((w) =>
-        w.getAction(action),
-      );
+      const actionWrappers = this.getActionWrappers();
       const draftEnemyState = draftState.enemies[action.enemy];
-      possibleActions[currentAction](draftState);
+      actionWrappers[currentAction].getAction(action, draftState);
       draftEnemyState.currentAction++;
-      draftEnemyState.currentAction %= possibleActions.length;
+      draftEnemyState.currentAction %= actionWrappers.length;
     });
   }
 

@@ -8,7 +8,7 @@ import { getEnemy } from '..';
 export type EnemyActionWrapper = {
   getAnimation: (action: EnemyAction, state: State) => GameAnimation;
   getDescription: (state: State, enemyState: EnemyState) => string;
-  getAction: (action: EnemyAction) => (state: State) => void;
+  getAction: (action: EnemyAction, state: State) => void;
 };
 
 export async function makeATurn(

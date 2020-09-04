@@ -30,7 +30,7 @@ export class Jom extends EnemyClass {
         getAnimation: (action: EnemyAction, state: State) =>
           new StubEnemyAnimation2(action, state),
         getDescription: () => 'Heals for 10 hp',
-        getAction: (action: EnemyAction) => (state: State): void => {
+        getAction: (action: EnemyAction, state: State): void => {
           state.enemies[action.enemy].health = Math.min(
             state.enemies[action.enemy].health + 10,
             state.enemies[action.enemy].maxHealth,
