@@ -1,7 +1,6 @@
 import { EnemyClass } from '../../enemy';
-import { State, EnemyAction } from '../../../../App/context';
-import { StubEnemyAnimation } from '../../../animations';
 import { EnemyActionWrapper } from '../../../actions';
+import { createAttackEnemyAction } from '../../../actions/enemies';
 
 export class Wolfie extends EnemyClass {
   constructor() {
@@ -12,24 +11,7 @@ export class Wolfie extends EnemyClass {
   }
 
   getActionWrappers(): EnemyActionWrapper[] {
-    return [
-      {
-        getAnimation: (action: EnemyAction, state: State) =>
-          new StubEnemyAnimation(action, state),
-        getDescription: () => 'Deal 10 damage',
-        getAction: (_, state: State): void => {
-          state.playerHealth -= 10;
-        },
-      },
-      {
-        getAnimation: (action: EnemyAction, state: State) =>
-          new StubEnemyAnimation(action, state),
-        getDescription: () => 'Deal 15 damage',
-        getAction: (_, state: State): void => {
-          state.playerHealth -= 15;
-        },
-      },
-    ];
+    return [createAttackEnemyAction(10), createAttackEnemyAction(15)];
   }
 }
 

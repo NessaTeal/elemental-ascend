@@ -1,4 +1,4 @@
-import { CastSpellAction, State, EnemyAction } from '../../App/context';
+import { CastSpellAction, State } from '../../App/context';
 
 export abstract class GameAnimation {
   constructor(animationDuration: number) {
@@ -41,23 +41,5 @@ export class ShadowBoltAnimation extends GameAnimation {
   }
   animate(): void {
     console.log('Doing third stuff');
-  }
-}
-
-export class StubEnemyAnimation extends GameAnimation {
-  constructor(action: EnemyAction, state: State) {
-    super(500);
-  }
-  animate(): void {
-    console.log('Enemy attacks');
-  }
-}
-
-export class StubEnemyAnimation2 extends GameAnimation {
-  constructor(action: EnemyAction, state: State) {
-    super(500);
-  }
-  animate(): void {
-    console.log('Enemy attacks 2');
   }
 }
