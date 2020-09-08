@@ -1,4 +1,4 @@
-import { EnemyClass, EnemyState } from '../../enemy';
+import { EnemyClass } from '../../enemy';
 import { State, EnemyAction } from '../../../../App/context';
 import { EnemyActionWrapper } from '../../../actions';
 import { StubEnemyAnimation2 } from '../../../animations';
@@ -11,18 +11,13 @@ export class Jom extends EnemyClass {
     });
   }
 
-  getActionDescription(enemyState: EnemyState): string {
-    const { currentAction } = enemyState;
-    return ['Deal 20 damage', 'Will heal for 10 hp'][currentAction];
-  }
-
   getActionWrappers(): EnemyActionWrapper[] {
     return [
       {
         getAnimation: (action: EnemyAction, state: State) =>
           new StubEnemyAnimation2(action, state),
         getDescription: () => 'Deal 20 damage',
-        getAction: () => (state: State): void => {
+        getAction: (_, state: State): void => {
           state.playerHealth -= 10;
         },
       },

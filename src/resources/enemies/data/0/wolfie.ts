@@ -17,7 +17,7 @@ export class Wolfie extends EnemyClass {
         getAnimation: (action: EnemyAction, state: State) =>
           new StubEnemyAnimation(action, state),
         getDescription: () => 'Deal 10 damage',
-        getAction: () => (state: State): void => {
+        getAction: (_, state: State): void => {
           state.playerHealth -= 10;
         },
       },
@@ -25,7 +25,7 @@ export class Wolfie extends EnemyClass {
         getAnimation: (action: EnemyAction, state: State) =>
           new StubEnemyAnimation(action, state),
         getDescription: () => 'Deal 15 damage',
-        getAction: () => (state: State): void => {
+        getAction: (_, state: State): void => {
           state.playerHealth -= 15;
         },
       },
