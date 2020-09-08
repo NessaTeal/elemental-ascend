@@ -31,7 +31,7 @@ class Fireball extends SpellClass {
     const totalPower = Math.ceil(power * slotPower);
 
     return produce(state, (draftState) => {
-      draftState.enemies[target].health -= totalPower;
+      draftState.enemies[target[0]].health -= totalPower;
     });
   }
 }

@@ -1,4 +1,4 @@
-import { CastSpellAction, State } from '../../App/context';
+import { CastSpellAction, State, GameDispatch } from '../../App/context';
 import { GameAnimation } from '../animations';
 
 export abstract class SpellClass {
@@ -8,13 +8,35 @@ export abstract class SpellClass {
     };
   }
 
-  abstract getAnimation(action: CastSpellAction, state: State): GameAnimation;
+  protected abstract getAnimation(
+    action: CastSpellAction,
+    state: State,
+  ): GameAnimation;
 
   abstract getDescription(state: State, spellState: SpellState): string;
 
   abstract getAction(action: CastSpellAction, state: State): State;
 
   startingState: SpellState;
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  protected getTargets(target: number, _state: State): number[] {
+    return [target];
+  }
+
+  async cast(
+    originalTarget: number,
+    state: State,
+    dispatch: GameDispatch,
+  ): Promise<void> {
+    return new Promise(async (resolve) => {
+      const targets = this.getTargets(originalTarget, state);
+      const action: CastSpellAction = { type: 'castSpell', target: targets };
+      await this.getAnimation(action, state).perform();
+      dispatch(action);
+      resolve();
+    });
+  }
 }
 
 type MinimalSpellState = {

@@ -30,7 +30,7 @@ export type Action =
   | StartTurnAction;
 export type CastSpellAction = {
   type: 'castSpell';
-  target: number;
+  target: number[];
 };
 export type ChangeSpellAction = {
   type: 'changeSpell';

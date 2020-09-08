@@ -32,7 +32,7 @@ class ShadowBolt extends SpellClass {
     const totalPower = Math.ceil(power * slotPower);
 
     return produce(state, (draftState) => {
-      const curse = draftState.enemies[target].afflictions.find(
+      const curse = draftState.enemies[target[0]].afflictions.find(
         (a: EnemyAffliction) => a.type === 'curse',
       );
 
@@ -41,13 +41,13 @@ class ShadowBolt extends SpellClass {
       if (curse) {
         stacks = ++curse.stacks;
       } else {
-        draftState.enemies[target].afflictions.push({
+        draftState.enemies[target[0]].afflictions.push({
           type: 'curse',
           stacks: 1,
         });
       }
 
-      draftState.enemies[target].health -= totalPower * stacks;
+      draftState.enemies[target[0]].health -= totalPower * stacks;
     });
   }
 }

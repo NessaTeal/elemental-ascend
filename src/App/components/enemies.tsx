@@ -1,12 +1,12 @@
 import React from 'react';
-import { useState, useDispatch, CastSpellAction } from '../context';
+import { useState, useDispatch } from '../context';
 import Enemy from './enemy';
-import { getEnemy, getSpell } from '../../resources';
+import { getEnemy } from '../../resources';
 import { makeATurn } from '../../resources/actions';
 
 const Enemies: React.FC = () => {
   const state = useState();
-  const { enemies, spells, currentSpell, playerTurn } = state;
+  const { enemies, playerTurn } = state;
   const dispatch = useDispatch();
 
   return (
@@ -17,11 +17,6 @@ const Enemies: React.FC = () => {
       </p>
       <div className="enemies">
         {enemies.map((e, index) => {
-          const action: CastSpellAction = { type: 'castSpell', target: index };
-          const animation = getSpell(spells[currentSpell].name).getAnimation(
-            action,
-            state,
-          );
           return (
             <Enemy
               key={index}
@@ -31,7 +26,7 @@ const Enemies: React.FC = () => {
                 [e.currentAction].getDescription(state, e)}
               onClick={() => {
                 if (playerTurn) {
-                  makeATurn(animation, action, dispatch);
+                  makeATurn(index, state, dispatch);
                 }
               }}
             />

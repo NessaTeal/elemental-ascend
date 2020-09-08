@@ -26,21 +26,25 @@ class LightningStrike extends SpellClass {
     )}) to another random one`;
   }
 
-  getAction(action: CastSpellAction, state: State): State {
-    const { target } = action;
-    const { power } = state.spells[state.currentSpell];
-    const slotPower = state.spellSlots[state.currentSlot].power;
-    const totalPower = Math.ceil(power * slotPower);
+  getTargets(target: number, state: State): number[] {
     const { enemies } = state;
-
     let secondTarget = Math.floor(Math.random() * enemies.length);
     while (secondTarget === target) {
       secondTarget = Math.floor(Math.random() * enemies.length);
     }
 
+    return [target, secondTarget];
+  }
+
+  getAction(action: CastSpellAction, state: State): State {
+    const { target } = action;
+    const { power } = state.spells[state.currentSpell];
+    const slotPower = state.spellSlots[state.currentSlot].power;
+    const totalPower = Math.ceil(power * slotPower);
+
     return produce(state, (draftState) => {
-      draftState.enemies[target].health -= Math.ceil(totalPower * 0.85);
-      draftState.enemies[secondTarget].health -= Math.ceil(totalPower * 0.25);
+      draftState.enemies[target[0]].health -= Math.ceil(totalPower * 0.85);
+      draftState.enemies[target[1]].health -= Math.ceil(totalPower * 0.25);
     });
   }
 }
