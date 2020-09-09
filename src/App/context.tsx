@@ -27,7 +27,8 @@ export type Action =
   | ChangeSpellAction
   | EnemyAction
   | EndTurnAction
-  | StartTurnAction;
+  | StartTurnAction
+  | EnemyDiedAction;
 export type CastSpellAction = {
   type: 'castSpell';
   target: number[];
@@ -45,6 +46,10 @@ export type EndTurnAction = {
 };
 export type StartTurnAction = {
   type: 'startTurn';
+};
+export type EnemyDiedAction = {
+  type: 'enemiesDied';
+  enemies: number[];
 };
 const DispatchContext = React.createContext<GameDispatch | undefined>(
   undefined,
@@ -82,6 +87,14 @@ function reducer(state: State, action: Action) {
       return {
         ...state,
         playerTurn: true,
+      };
+    }
+    case 'enemiesDied': {
+      return {
+        ...state,
+        enemies: state.enemies.filter(
+          (_, index) => !action.enemies.includes(index),
+        ),
       };
     }
   }

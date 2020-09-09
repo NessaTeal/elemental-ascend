@@ -14,7 +14,8 @@ const Enemies: React.FC = () => {
       <div className="enemies">
         {enemies.map((e, index) => {
           return (
-            <div key={index} id={`enemy-${index}`}>
+            // key should be super unique id
+            <div key={e.name} id={`enemy-${index}`}>
               <Enemy
                 {...e}
                 actionDescription={getEnemy(e.name)

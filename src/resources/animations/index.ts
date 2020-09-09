@@ -12,14 +12,18 @@ export function getPlayerPosition(): { x: number; y: number } {
   return getObjectPosition(player);
 }
 
-export function getEnemyPosition(index: number): { x: number; y: number } {
+export function getEnemy(index: number): HTMLElement {
   const enemy = document.getElementById(`enemy-${index}`);
 
   if (!enemy) {
     throw Error("Trying to make animation with player which doesn't exist.");
   }
 
-  return getObjectPosition(enemy);
+  return enemy;
+}
+
+export function getEnemyPosition(index: number): { x: number; y: number } {
+  return getObjectPosition(getEnemy(index));
 }
 
 function getObjectPosition(element: HTMLElement): { x: number; y: number } {

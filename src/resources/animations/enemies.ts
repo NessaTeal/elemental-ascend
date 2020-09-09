@@ -5,6 +5,7 @@ import {
   getPlayerPosition,
   getEnemyPosition,
   getScene,
+  getEnemy,
 } from '.';
 
 export class GenericEnemyAttackAnimation implements GameAnimation {
@@ -69,6 +70,27 @@ export class GenericEnemyHealAnimation implements GameAnimation {
       easing: 'linear',
       duration: 300,
       changeComplete: () => getScene().removeChild(div),
+    });
+
+    return animation.finished;
+  }
+}
+
+export class EnemyDiesAnimation implements GameAnimation {
+  enemy: number;
+
+  constructor(enemy: number) {
+    this.enemy = enemy;
+  }
+
+  animate(): Promise<void> {
+    const enemy = getEnemy(this.enemy);
+
+    const animation = anime({
+      targets: enemy,
+      opacity: 0,
+      easing: 'easeOutCubic',
+      duration: 200,
     });
 
     return animation.finished;
