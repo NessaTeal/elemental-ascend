@@ -1,5 +1,4 @@
 import { CastSpellAction, State, GameDispatch } from '../../App/context';
-import { GameAnimation } from '../animations';
 
 export abstract class SpellClass {
   constructor(state: MinimalSpellState) {
@@ -11,7 +10,7 @@ export abstract class SpellClass {
   protected abstract getAnimation(
     action: CastSpellAction,
     state: State,
-  ): GameAnimation;
+  ): Promise<void>;
 
   abstract getDescription(state: State, spellState: SpellState): string;
 
@@ -32,7 +31,7 @@ export abstract class SpellClass {
     return new Promise(async (resolve) => {
       const targets = this.getTargets(originalTarget, state);
       const action: CastSpellAction = { type: 'castSpell', target: targets };
-      await this.getAnimation(action, state).perform();
+      await this.getAnimation(action, state);
       dispatch(action);
       resolve();
     });

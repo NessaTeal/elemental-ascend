@@ -11,25 +11,22 @@ const Enemies: React.FC = () => {
 
   return (
     <>
-      <h3>Enemies</h3>
-      <p>
-        Click an enemy to cast currently selected spell with the current slot
-      </p>
       <div className="enemies">
         {enemies.map((e, index) => {
           return (
-            <Enemy
-              key={index}
-              {...e}
-              actionDescription={getEnemy(e.name)
-                .getActionWrappers()
-                [e.currentAction].getDescription(state, e)}
-              onClick={() => {
-                if (playerTurn) {
-                  makeATurn(index, state, dispatch);
-                }
-              }}
-            />
+            <div key={index} id={`enemy-${index}`}>
+              <Enemy
+                {...e}
+                actionDescription={getEnemy(e.name)
+                  .getActionWrappers()
+                  [e.currentAction].getDescription(state, e)}
+                onClick={() => {
+                  if (playerTurn) {
+                    makeATurn(index, state, dispatch);
+                  }
+                }}
+              />
+            </div>
           );
         })}
       </div>

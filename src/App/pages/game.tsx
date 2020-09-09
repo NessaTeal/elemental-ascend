@@ -7,8 +7,10 @@ import Player from '../components/player';
 const Game: React.FC = () => {
   return (
     <>
-      <Enemies />
-      <Player />
+      <div className="scene" id="scene">
+        <Player />
+        <Enemies />
+      </div>
       <SpellChain />
       <SpellBook />
     </>

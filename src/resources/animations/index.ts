@@ -1,45 +1,40 @@
-import { CastSpellAction, State } from '../../App/context';
+export type GameAnimation = {
+  animate(): Promise<void>;
+};
 
-export abstract class GameAnimation {
-  constructor(animationDuration: number) {
-    this.animationDuration = animationDuration;
+export function getPlayerPosition(): { x: number; y: number } {
+  const player = document.getElementById('player');
+
+  if (!player) {
+    throw Error("Trying to make animation with player which doesn't exist.");
   }
-  async perform(): Promise<void> {
-    return new Promise((accept) => {
-      this.animate();
-      setTimeout(() => {
-        console.log('Done');
-        accept();
-      }, this.animationDuration);
-    });
-  }
-  animationDuration: number;
-  protected abstract animate(): void;
+
+  return getObjectPosition(player);
 }
 
-export class FireballAnimation extends GameAnimation {
-  constructor(action: CastSpellAction, state: State) {
-    super(300);
+export function getEnemyPosition(index: number): { x: number; y: number } {
+  const enemy = document.getElementById(`enemy-${index}`);
+
+  if (!enemy) {
+    throw Error("Trying to make animation with player which doesn't exist.");
   }
-  animate(): void {
-    console.log('Doing stuff');
-  }
+
+  return getObjectPosition(enemy);
 }
 
-export class LightningStrikeAnimation extends GameAnimation {
-  constructor(action: CastSpellAction, state: State) {
-    super(300);
-  }
-  animate(): void {
-    console.log('Doing second stuff');
-  }
+function getObjectPosition(element: HTMLElement): { x: number; y: number } {
+  return {
+    x: element.offsetLeft + element.offsetWidth / 2,
+    y: element.offsetTop + element.offsetHeight / 2,
+  };
 }
 
-export class ShadowBoltAnimation extends GameAnimation {
-  constructor(action: CastSpellAction, state: State) {
-    super(300);
+export function getScene(): HTMLElement {
+  const scene = document.getElementById('scene');
+
+  if (!scene) {
+    throw Error("Trying to make animation with player which doesn't exist.");
   }
-  animate(): void {
-    console.log('Doing third stuff');
-  }
+
+  return scene;
 }

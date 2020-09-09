@@ -1,7 +1,7 @@
 import { SpellClass, SpellState } from '../spell';
 import { CastSpellAction, State } from '../../../App/context';
 import produce from 'immer';
-import { GameAnimation, LightningStrikeAnimation } from '../../animations';
+import { LightningStrikeAnimation } from '../../animations/spells';
 
 class LightningStrike extends SpellClass {
   constructor() {
@@ -11,8 +11,8 @@ class LightningStrike extends SpellClass {
     });
   }
 
-  getAnimation(action: CastSpellAction, state: State): GameAnimation {
-    return new LightningStrikeAnimation(action, state);
+  getAnimation(action: CastSpellAction, state: State): Promise<void> {
+    return new LightningStrikeAnimation(action, state).animate();
   }
 
   getDescription(state: State, spellState: SpellState) {

@@ -41,7 +41,7 @@ export async function makeATurn(
           await getEnemy(name)
             .getActionWrappers()
             [currentAction].getAnimation(enemyAction, getState())
-            .perform();
+            .animate();
 
           dispatch(enemyAction);
 

@@ -2,7 +2,7 @@ import { SpellClass, SpellState } from '../spell';
 import { CastSpellAction, State } from '../../../App/context';
 import produce from 'immer';
 import { EnemyAffliction } from '../../enemies/enemy';
-import { GameAnimation, ShadowBoltAnimation } from '../../animations';
+import { ShadowBoltAnimation } from '../../animations/spells';
 
 class ShadowBolt extends SpellClass {
   constructor() {
@@ -12,8 +12,8 @@ class ShadowBolt extends SpellClass {
     });
   }
 
-  getAnimation(action: CastSpellAction, state: State): GameAnimation {
-    return new ShadowBoltAnimation(action, state);
+  getAnimation(action: CastSpellAction, state: State): Promise<void> {
+    return new ShadowBoltAnimation(action, state).animate();
   }
 
   getDescription(state: State, spellState: SpellState) {
