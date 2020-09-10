@@ -28,9 +28,13 @@ class LightningStrike extends SpellClass {
   ): Promise<void> {
     return new Promise(async (resolve) => {
       const { enemies } = state;
-      let secondTarget = Math.floor(Math.random() * enemies.length);
-      while (secondTarget === target) {
-        secondTarget = Math.floor(Math.random() * enemies.length);
+      let secondTarget: number | null;
+      if (enemies.length === 1) {
+        secondTarget = null;
+      } else {
+        do {
+          secondTarget = Math.floor(Math.random() * enemies.length);
+        } while (secondTarget === target);
       }
 
       await new LightningStrikeAnimation(
@@ -46,9 +50,10 @@ class LightningStrike extends SpellClass {
         type: 'castSpell',
         mutation: (draftState) => {
           draftState.enemies[target].health -= Math.ceil(totalPower * 0.85);
-          draftState.enemies[secondTarget].health -= Math.ceil(
-            totalPower * 0.25,
-          );
+          secondTarget !== null &&
+            (draftState.enemies[secondTarget].health -= Math.ceil(
+              totalPower * 0.25,
+            ));
         },
       });
 
