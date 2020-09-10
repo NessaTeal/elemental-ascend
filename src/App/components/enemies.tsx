@@ -23,7 +23,7 @@ const Enemies: React.FC = () => {
                   [e.currentAction].getDescription(state, e)}
                 onClick={() => {
                   if (playerTurn) {
-                    makeATurn(index, state, dispatch);
+                    makeATurn(index, dispatch);
                   }
                 }}
               />

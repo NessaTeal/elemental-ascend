@@ -1,4 +1,4 @@
-import { EnemyAction, State } from '../../App/context';
+import { State } from '../../App/context';
 import anime from 'animejs';
 import {
   GameAnimation,
@@ -9,17 +9,17 @@ import {
 } from '.';
 
 export class GenericEnemyAttackAnimation implements GameAnimation {
-  action: EnemyAction;
+  enemy: number;
   state: State;
 
-  constructor(action: EnemyAction, state: State) {
-    this.action = action;
+  constructor(enemy: number, state: State) {
+    this.enemy = enemy;
     this.state = state;
   }
 
   animate(): Promise<void> {
     const div = document.createElement('DIV');
-    const { x, y } = getEnemyPosition(this.action.enemy);
+    const { x, y } = getEnemyPosition(this.enemy);
     div.style.backgroundColor = 'blue';
     div.style.height = '30px';
     div.style.width = '30px';
@@ -44,17 +44,17 @@ export class GenericEnemyAttackAnimation implements GameAnimation {
 }
 
 export class GenericEnemyHealAnimation implements GameAnimation {
-  action: EnemyAction;
+  enemy: number;
   state: State;
 
-  constructor(action: EnemyAction, state: State) {
-    this.action = action;
+  constructor(enemy: number, state: State) {
+    this.enemy = enemy;
     this.state = state;
   }
 
   animate(): Promise<void> {
     const div = document.createElement('DIV');
-    const { x, y } = getEnemyPosition(this.action.enemy);
+    const { x, y } = getEnemyPosition(this.enemy);
     div.style.backgroundColor = 'cyan';
     div.style.height = '30px';
     div.style.width = '30px';

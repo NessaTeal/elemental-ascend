@@ -1,5 +1,4 @@
-import { State, EnemyAction } from '../../App/context';
-import produce from 'immer';
+import { State, GameDispatch } from '../../App/context';
 import { EnemyActionWrapper } from '../actions';
 
 export abstract class EnemyClass {
@@ -11,14 +10,24 @@ export abstract class EnemyClass {
       ...state,
     };
   }
-  act(action: EnemyAction, state: State): State {
-    const { currentAction } = state.enemies[action.enemy];
-    return produce(state, (draftState) => {
-      const actionWrappers = this.getActionWrappers();
-      const draftEnemyState = draftState.enemies[action.enemy];
-      actionWrappers[currentAction].getAction(action, draftState);
-      draftEnemyState.currentAction++;
-      draftEnemyState.currentAction %= actionWrappers.length;
+  async act(
+    enemy: number,
+    state: State,
+    dispatch: GameDispatch,
+  ): Promise<void> {
+    const { currentAction } = state.enemies[enemy];
+    const actionWrappers = this.getActionWrappers();
+    const actionWrapper = actionWrappers[currentAction];
+
+    await actionWrapper.getAnimation(enemy, state).animate();
+    dispatch({
+      type: 'enemyAction',
+      mutation: (draftState) => {
+        const draftEnemyState = draftState.enemies[enemy];
+        actionWrapper.getAction(enemy, draftState);
+        draftEnemyState.currentAction++;
+        draftEnemyState.currentAction %= actionWrappers.length;
+      },
     });
   }
 

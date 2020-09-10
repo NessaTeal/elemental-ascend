@@ -1,20 +1,17 @@
 import { GameAnimation } from '../animations';
-import { Action, State, EnemyAction, GameDispatch } from '../../App/context';
+import { State, GameDispatch } from '../../App/context';
 import { EnemyState } from '../enemies/enemy';
-import { Thunk } from 'react-hook-thunk-reducer';
-import { Dispatch } from 'react';
 import { getEnemy, getSpell } from '..';
 import { EnemyDiesAnimation } from '../animations/enemies';
 
 export type EnemyActionWrapper = {
-  getAnimation: (action: EnemyAction, state: State) => GameAnimation;
+  getAnimation: (enemy: number, state: State) => GameAnimation;
   getDescription: (state: State, enemyState: EnemyState) => string;
-  getAction: (action: EnemyAction, state: State) => void;
+  getAction: (enemy: number, state: State) => void;
 };
 
 export async function makeATurn(
   originalTarget: number,
-  state: State,
   dispatch: GameDispatch,
 ): Promise<void> {
   dispatch({ type: 'endTurn' });
@@ -24,7 +21,7 @@ export async function makeATurn(
 
     await getSpell(spells[currentSpell].name).cast(
       originalTarget,
-      state,
+      getState(),
       dispatch,
     );
 
@@ -47,35 +44,14 @@ export async function makeATurn(
     const { enemies: aliveEnemies } = getState();
 
     if (aliveEnemies.length > 0) {
-      dispatch(nextEnemyCallback(0));
+      for (let i = 0; i < aliveEnemies.length; i++) {
+        const { name } = enemies[i];
+        await getEnemy(name).act(i, getState(), dispatch);
+      }
+
+      dispatch({ type: 'startTurn' });
     } else {
       // you killed everyone
     }
   });
 }
-
-const nextEnemyCallback = (index: number) => {
-  return async (
-    dispatch: Dispatch<Action | Thunk<State, Action>>,
-    getState: () => State,
-  ) => {
-    const { enemies } = getState();
-    const { name, currentAction } = enemies[index];
-    const enemyAction: EnemyAction = {
-      type: 'enemyAction',
-      enemy: index,
-    };
-    await getEnemy(name)
-      .getActionWrappers()
-      [currentAction].getAnimation(enemyAction, getState())
-      .animate();
-
-    dispatch(enemyAction);
-
-    if (++index < enemies.length) {
-      dispatch(nextEnemyCallback(index));
-    } else {
-      dispatch({ type: 'startTurn' });
-    }
-  };
-};

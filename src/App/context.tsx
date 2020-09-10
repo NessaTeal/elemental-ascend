@@ -36,7 +36,7 @@ export type ChangeSpellAction = {
 };
 export type EnemyAction = {
   type: 'enemyAction';
-  enemy: number;
+  mutation: (state: State) => void;
 };
 export type EndTurnAction = {
   type: 'endTurn';
@@ -65,7 +65,7 @@ function reducer(state: State, action: Action) {
       };
     }
     case 'enemyAction': {
-      return getEnemy(state.enemies[action.enemy].name).act(action, state);
+      return produce(state, action.mutation);
     }
     case 'endTurn': {
       return {
