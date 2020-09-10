@@ -74,9 +74,12 @@ function reducer(state: State, action: Action) {
       };
     }
     case 'startTurn': {
+      const { spellSlots, currentSlot } = state;
       return {
         ...state,
         playerTurn: true,
+        currentSlot:
+          currentSlot === spellSlots.length - 1 ? 0 : currentSlot + 1,
       };
     }
     case 'enemiesDied': {
@@ -88,12 +91,7 @@ function reducer(state: State, action: Action) {
       };
     }
     case 'castSpell': {
-      const { spellSlots, currentSlot } = state;
-      return {
-        ...produce(state, action.mutation),
-        currentSlot:
-          currentSlot === spellSlots.length - 1 ? 0 : currentSlot + 1,
-      };
+      return produce(state, action.mutation);
     }
   }
 }
