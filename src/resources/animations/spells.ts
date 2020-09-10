@@ -1,4 +1,4 @@
-import { CastSpellAction, State } from '../../App/context';
+import { State } from '../../App/context';
 import anime from 'animejs';
 import {
   GameAnimation,
@@ -8,11 +8,11 @@ import {
 } from '.';
 
 export class FireballAnimation implements GameAnimation {
-  action: CastSpellAction;
+  target: number;
   state: State;
 
-  constructor(action: CastSpellAction, state: State) {
-    this.action = action;
+  constructor(target: number, state: State) {
+    this.target = target;
     this.state = state;
   }
   animate(): Promise<void> {
@@ -24,7 +24,7 @@ export class FireballAnimation implements GameAnimation {
     div.style.position = 'absolute';
     div.style.top = y - 15 + 'px';
     div.style.left = x - 15 + 'px';
-    const { x: enemyX } = getEnemyPosition(this.action.target[0]);
+    const { x: enemyX } = getEnemyPosition(this.target);
     const xDiff = enemyX - x;
     getScene().appendChild(div);
 
@@ -42,11 +42,11 @@ export class FireballAnimation implements GameAnimation {
 }
 
 export class LightningStrikeAnimation implements GameAnimation {
-  action: CastSpellAction;
+  targets: [number, number];
   state: State;
 
-  constructor(action: CastSpellAction, state: State) {
-    this.action = action;
+  constructor(targets: [number, number], state: State) {
+    this.targets = targets;
     this.state = state;
   }
   async animate(): Promise<void> {
@@ -58,8 +58,8 @@ export class LightningStrikeAnimation implements GameAnimation {
     div.style.position = 'absolute';
     div.style.top = y - 15 + 'px';
     div.style.left = x - 15 + 'px';
-    const { x: enemyX1 } = getEnemyPosition(this.action.target[0]);
-    const { x: enemyX2 } = getEnemyPosition(this.action.target[1]);
+    const { x: enemyX1 } = getEnemyPosition(this.targets[0]);
+    const { x: enemyX2 } = getEnemyPosition(this.targets[1]);
     const xDiff1 = enemyX1 - x;
     const xDiff2 = enemyX2 - enemyX1;
     getScene().appendChild(div);
@@ -88,11 +88,11 @@ export class LightningStrikeAnimation implements GameAnimation {
 }
 
 export class ShadowBoltAnimation implements GameAnimation {
-  action: CastSpellAction;
+  target: number;
   state: State;
 
-  constructor(action: CastSpellAction, state: State) {
-    this.action = action;
+  constructor(target: number, state: State) {
+    this.target = target;
     this.state = state;
   }
   async animate(): Promise<void> {
@@ -104,7 +104,7 @@ export class ShadowBoltAnimation implements GameAnimation {
     div.style.position = 'absolute';
     div.style.top = y - 15 + 'px';
     div.style.left = x - 15 + 'px';
-    const { x: enemyX } = getEnemyPosition(this.action.target[0]);
+    const { x: enemyX } = getEnemyPosition(this.target);
     const xDiff = enemyX - x;
     getScene().appendChild(div);
 

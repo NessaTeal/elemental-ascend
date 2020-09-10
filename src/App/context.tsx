@@ -9,6 +9,7 @@ import importAll, {
 } from '../resources';
 import { SpellSlotState } from '../resources/spell-slots/spell-slot';
 import useThunkReducer, { Thunk } from 'react-hook-thunk-reducer';
+import produce from 'immer';
 
 export interface State {
   playerHealth: number;
@@ -23,16 +24,12 @@ const StateContext = React.createContext<State | undefined>(undefined);
 
 export type GameDispatch = Dispatch<Action | Thunk<State, Action>>;
 export type Action =
-  | CastSpellAction
   | ChangeSpellAction
   | EnemyAction
   | EndTurnAction
   | StartTurnAction
-  | EnemyDiedAction;
-export type CastSpellAction = {
-  type: 'castSpell';
-  target: number[];
-};
+  | EnemyDiedAction
+  | CastSpellAction;
 export type ChangeSpellAction = {
   type: 'changeSpell';
   spell: number;
@@ -51,23 +48,16 @@ export type EnemyDiedAction = {
   type: 'enemiesDied';
   enemies: number[];
 };
+export type CastSpellAction = {
+  type: 'castSpell';
+  mutation: (state: State) => void;
+};
 const DispatchContext = React.createContext<GameDispatch | undefined>(
   undefined,
 );
 
 function reducer(state: State, action: Action) {
   switch (action.type) {
-    case 'castSpell': {
-      const { spells, currentSlot, currentSpell } = state;
-      const { name } = spells[currentSpell];
-
-      const afterCastState = getSpell(name).getAction(action, state);
-
-      return {
-        ...afterCastState,
-        currentSlot: currentSlot === spells.length - 1 ? 0 : currentSlot + 1,
-      };
-    }
     case 'changeSpell': {
       return {
         ...state,
@@ -95,6 +85,14 @@ function reducer(state: State, action: Action) {
         enemies: state.enemies.filter(
           (_, index) => !action.enemies.includes(index),
         ),
+      };
+    }
+    case 'castSpell': {
+      const { spellSlots, currentSlot } = state;
+      return {
+        ...produce(state, action.mutation),
+        currentSlot:
+          currentSlot === spellSlots.length - 1 ? 0 : currentSlot + 1,
       };
     }
   }

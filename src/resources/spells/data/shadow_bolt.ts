@@ -1,6 +1,5 @@
 import { SpellClass, SpellState } from '../spell';
-import { CastSpellAction, State } from '../../../App/context';
-import produce from 'immer';
+import { GameDispatch, State } from '../../../App/context';
 import { EnemyAffliction } from '../../enemies/enemy';
 import { ShadowBoltAnimation } from '../../animations/spells';
 
@@ -12,10 +11,6 @@ class ShadowBolt extends SpellClass {
     });
   }
 
-  getAnimation(action: CastSpellAction, state: State): Promise<void> {
-    return new ShadowBoltAnimation(action, state).animate();
-  }
-
   getDescription(state: State, spellState: SpellState) {
     const { power } = spellState;
     const slotPower = state.spellSlots[state.currentSlot].power;
@@ -25,29 +20,41 @@ class ShadowBolt extends SpellClass {
     )}) damage per each`;
   }
 
-  getAction(action: CastSpellAction, state: State): State {
-    const { target } = action;
-    const { power } = state.spells[state.currentSpell];
-    const slotPower = state.spellSlots[state.currentSlot].power;
-    const totalPower = Math.ceil(power * slotPower);
+  async cast(
+    target: number,
+    state: State,
+    dispatch: GameDispatch,
+  ): Promise<void> {
+    return new Promise(async (resolve) => {
+      await new ShadowBoltAnimation(target, state).animate();
 
-    return produce(state, (draftState) => {
-      const curse = draftState.enemies[target[0]].afflictions.find(
-        (a: EnemyAffliction) => a.type === 'curse',
-      );
+      const { power } = state.spells[state.currentSpell];
+      const slotPower = state.spellSlots[state.currentSlot].power;
+      const totalPower = Math.ceil(power * slotPower);
 
-      let stacks = 1;
+      dispatch({
+        type: 'castSpell',
+        mutation: (draftState) => {
+          const curse = draftState.enemies[target].afflictions.find(
+            (a: EnemyAffliction) => a.type === 'curse',
+          );
 
-      if (curse) {
-        stacks = ++curse.stacks;
-      } else {
-        draftState.enemies[target[0]].afflictions.push({
-          type: 'curse',
-          stacks: 1,
-        });
-      }
+          let stacks = 1;
 
-      draftState.enemies[target[0]].health -= totalPower * stacks;
+          if (curse) {
+            stacks = ++curse.stacks;
+          } else {
+            draftState.enemies[target].afflictions.push({
+              type: 'curse',
+              stacks: 1,
+            });
+          }
+
+          draftState.enemies[target].health -= totalPower * stacks;
+        },
+      });
+
+      resolve();
     });
   }
 }

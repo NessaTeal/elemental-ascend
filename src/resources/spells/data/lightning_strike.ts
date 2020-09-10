@@ -1,6 +1,5 @@
 import { SpellClass, SpellState } from '../spell';
-import { CastSpellAction, State } from '../../../App/context';
-import produce from 'immer';
+import { GameDispatch, State } from '../../../App/context';
 import { LightningStrikeAnimation } from '../../animations/spells';
 
 class LightningStrike extends SpellClass {
@@ -9,10 +8,6 @@ class LightningStrike extends SpellClass {
       name: 'Lightning strike',
       power: 8,
     });
-  }
-
-  getAnimation(action: CastSpellAction, state: State): Promise<void> {
-    return new LightningStrikeAnimation(action, state).animate();
   }
 
   getDescription(state: State, spellState: SpellState) {
@@ -26,25 +21,38 @@ class LightningStrike extends SpellClass {
     )}) to another random one`;
   }
 
-  getTargets(target: number, state: State): number[] {
-    const { enemies } = state;
-    let secondTarget = Math.floor(Math.random() * enemies.length);
-    while (secondTarget === target) {
-      secondTarget = Math.floor(Math.random() * enemies.length);
-    }
+  async cast(
+    target: number,
+    state: State,
+    dispatch: GameDispatch,
+  ): Promise<void> {
+    return new Promise(async (resolve) => {
+      const { enemies } = state;
+      let secondTarget = Math.floor(Math.random() * enemies.length);
+      while (secondTarget === target) {
+        secondTarget = Math.floor(Math.random() * enemies.length);
+      }
 
-    return [target, secondTarget];
-  }
+      await new LightningStrikeAnimation(
+        [target, secondTarget],
+        state,
+      ).animate();
 
-  getAction(action: CastSpellAction, state: State): State {
-    const { target } = action;
-    const { power } = state.spells[state.currentSpell];
-    const slotPower = state.spellSlots[state.currentSlot].power;
-    const totalPower = Math.ceil(power * slotPower);
+      const { power } = state.spells[state.currentSpell];
+      const slotPower = state.spellSlots[state.currentSlot].power;
+      const totalPower = Math.ceil(power * slotPower);
 
-    return produce(state, (draftState) => {
-      draftState.enemies[target[0]].health -= Math.ceil(totalPower * 0.85);
-      draftState.enemies[target[1]].health -= Math.ceil(totalPower * 0.25);
+      dispatch({
+        type: 'castSpell',
+        mutation: (draftState) => {
+          draftState.enemies[target].health -= Math.ceil(totalPower * 0.85);
+          draftState.enemies[secondTarget].health -= Math.ceil(
+            totalPower * 0.25,
+          );
+        },
+      });
+
+      resolve();
     });
   }
 }
