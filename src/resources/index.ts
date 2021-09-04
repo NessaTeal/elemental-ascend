@@ -7,8 +7,8 @@ import importspellSlots, {
   SpellSlotStorage,
   SpellSlotState,
 } from './spell-slots/spell-slot';
-import importSpells, { SpellConstructor } from './spells/spellLoader';
-import { SpellClass, SpellState } from './spells/spell';
+import importSpells from './spells/spellLoader';
+import { SpellClass, SpellConstructor, SpellState } from './spells/spell';
 
 let spells: SpellClass[] = [];
 

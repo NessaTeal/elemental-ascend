@@ -1,5 +1,4 @@
 import { State, GameDispatch } from '../../App/context';
-import { SpellConstructor } from './spellLoader';
 
 export type StartingSpellState = {
   name: string;
@@ -10,6 +9,9 @@ export type SpellState = StartingSpellState & {
   handle: SpellConstructor;
 };
 
+export interface SpellConstructor extends Function {
+  new (): SpellClass;
+}
 export abstract class SpellClass {
   protected abstract readonly startingState: StartingSpellState;
 
