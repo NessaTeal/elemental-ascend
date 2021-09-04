@@ -1,4 +1,3 @@
-import importSpells, { SpellClass, SpellStorage } from './spells/spell';
 import importEnemies, { EnemyClass, EnemyStorage } from './enemies/enemy';
 import importEncounters, {
   Encounter,
@@ -8,19 +7,23 @@ import importspellSlots, {
   SpellSlotStorage,
   SpellSlotState,
 } from './spell-slots/spell-slot';
+import importSpells, { SpellConstructor } from './spells/spellLoader';
+import { SpellClass, SpellState } from './spells/spell';
 
-let spells: SpellStorage[] = [];
+let spells: SpellClass[] = [];
 
-export function getSpell(name: string): SpellClass {
-  const spell = spells.find(
-    (s) => s.name === name || s.spell.startingState.name === name,
-  )?.spell;
-
-  if (!spell) {
-    throw Error(`No entry found for spell ${name}`);
+export function getSpellDefinition(
+  spell: SpellConstructor | SpellState,
+): SpellClass {
+  if (typeof spell === 'object') {
+    spell = spell.handle;
+  }
+  const spellObject = spells.find((s) => s.constructor === spell);
+  if (!spellObject) {
+    throw Error(`No entry found for spell ${spell.name}`);
   }
 
-  return spell;
+  return spellObject;
 }
 
 let enemies: EnemyStorage[] = [];

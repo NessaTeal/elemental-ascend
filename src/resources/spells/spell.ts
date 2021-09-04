@@ -1,44 +1,29 @@
 import { State, GameDispatch } from '../../App/context';
+import { SpellConstructor } from './spellLoader';
 
-export abstract class SpellClass {
-  constructor(state: MinimalSpellState) {
-    this.startingState = {
-      ...state,
-    };
-  }
-
-  abstract getDescription(state: State, spellState: SpellState): string;
-
-  startingState: SpellState;
-
-  abstract async cast(
-    target: number,
-    state: State,
-    dispatch: GameDispatch,
-  ): Promise<void>;
-}
-
-type MinimalSpellState = {
+export type StartingSpellState = {
   name: string;
   power: number;
 };
 
-export type SpellState = Required<MinimalSpellState>;
-
-export type SpellStorage = {
-  name: string;
-  spell: SpellClass;
+export type SpellState = StartingSpellState & {
+  handle: SpellConstructor;
 };
 
-export default function importSpells(): SpellStorage[] {
-  const modules = require.context('./data', true, /.*(?!ts)$/);
-  const spells: SpellStorage[] = [];
+export abstract class SpellClass {
+  protected abstract readonly startingState: StartingSpellState;
 
-  modules.keys().forEach((m) => {
-    const [, name] = m.split('/');
-    const spell = modules(m).default();
-    spells.push({ name, spell });
-  });
+  public getStartingState(): SpellState {
+    return {
+      ...this.startingState,
+      handle: this.constructor as SpellConstructor,
+    };
+  }
+  abstract getDescription(state: State, spellState: SpellState): string;
 
-  return spells;
+  abstract cast(
+    target: number,
+    state: State,
+    dispatch: GameDispatch,
+  ): Promise<void>;
 }

@@ -1,7 +1,7 @@
 import { GameAnimation } from '../animations';
 import { State, GameDispatch } from '../../App/context';
 import { EnemyState } from '../enemies/enemy';
-import { getEnemy, getSpell } from '..';
+import { getEnemy, getSpellDefinition } from '..';
 import { EnemyDiesAnimation } from '../animations/enemies';
 
 export type EnemyActionWrapper = {
@@ -19,7 +19,7 @@ export async function makeATurn(
   dispatch(async (dispatch, getState) => {
     const { currentSpell, spells } = getState();
 
-    await getSpell(spells[currentSpell].name).cast(
+    await getSpellDefinition(spells[currentSpell]).cast(
       originalTarget,
       getState(),
       dispatch,

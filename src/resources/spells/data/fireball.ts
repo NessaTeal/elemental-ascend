@@ -2,13 +2,11 @@ import { SpellClass, SpellState } from '../spell';
 import { GameDispatch, State } from '../../../App/context';
 import { FireballAnimation } from '../../animations/spells';
 
-class Fireball extends SpellClass {
-  constructor() {
-    super({
-      name: 'Fireball',
-      power: 10,
-    });
-  }
+export default class Fireball extends SpellClass {
+  startingState = {
+    name: 'Fireball',
+    power: 10,
+  };
 
   getDescription(state: State, spellState: SpellState) {
     const { power } = spellState;
@@ -42,5 +40,3 @@ class Fireball extends SpellClass {
     });
   }
 }
-
-export default (): Fireball => new Fireball();

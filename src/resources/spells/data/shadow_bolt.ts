@@ -3,13 +3,11 @@ import { GameDispatch, State } from '../../../App/context';
 import { EnemyAffliction } from '../../enemies/enemy';
 import { ShadowBoltAnimation } from '../../animations/spells';
 
-class ShadowBolt extends SpellClass {
-  constructor() {
-    super({
-      name: 'Shadow bolt',
-      power: 6,
-    });
-  }
+export default class ShadowBolt extends SpellClass {
+  startingState = {
+    name: 'Shadow bolt',
+    power: 6,
+  };
 
   getDescription(state: State, spellState: SpellState) {
     const { power } = spellState;
@@ -58,5 +56,3 @@ class ShadowBolt extends SpellClass {
     });
   }
 }
-
-export default (): ShadowBolt => new ShadowBolt();
