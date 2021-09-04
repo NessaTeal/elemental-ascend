@@ -2,13 +2,11 @@ import { SpellClass, SpellState } from '../spell';
 import { GameDispatch, State } from '../../../App/context';
 import { LightningStrikeAnimation } from '../../animations/spells';
 
-class LightningStrike extends SpellClass {
-  constructor() {
-    super({
-      name: 'Lightning strike',
-      power: 8,
-    });
-  }
+export default class LightningStrike extends SpellClass {
+  startingState = {
+    name: 'Lightning strike',
+    power: 8,
+  };
 
   getDescription(state: State, spellState: SpellState) {
     const { power } = spellState;
@@ -61,5 +59,3 @@ class LightningStrike extends SpellClass {
     });
   }
 }
-
-export default (): LightningStrike => new LightningStrike();

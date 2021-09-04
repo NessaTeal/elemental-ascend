@@ -1,7 +1,7 @@
 import React from 'react';
 import { useState, useDispatch } from '../context';
 import Spell from './spell';
-import { getSpell } from '../../resources';
+import { getSpellDefinition } from '../../resources';
 
 const SpellBook: React.FC = () => {
   const state = useState();
@@ -18,7 +18,10 @@ const SpellBook: React.FC = () => {
             key={index}
             {...s}
             active={index === currentSpell}
-            description={getSpell(s.name).getDescription(state, spells[index])}
+            description={getSpellDefinition(s).getDescription(
+              state,
+              spells[index],
+            )}
             onClick={() => dispatch({ type: 'changeSpell', spell: index })}
           />
         ))}

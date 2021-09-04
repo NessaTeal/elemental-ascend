@@ -2,7 +2,7 @@ import React, { ReactElement, Dispatch } from 'react';
 import { EnemyState } from '../resources/enemies/enemy';
 import { SpellState } from '../resources/spells/spell';
 import importAll, {
-  getSpell,
+  getSpellDefinition,
   getEnemy,
   getEncounter,
   getStartingSpellSlots,
@@ -10,6 +10,9 @@ import importAll, {
 import { SpellSlotState } from '../resources/spell-slots/spell-slot';
 import useThunkReducer, { Thunk } from 'react-hook-thunk-reducer';
 import produce from 'immer';
+import Fireball from '../resources/spells/data/fireball';
+import LightningStrike from '../resources/spells/data/lightning_strike';
+import ShadowBolt from '../resources/spells/data/shadow_bolt';
 
 export interface State {
   playerHealth: number;
@@ -106,9 +109,9 @@ export function Provider({
     playerHealth: 100,
     enemies: getEncounter(0).enemies.map((e) => getEnemy(e).startingState),
     spells: [
-      getSpell('Fireball').startingState,
-      getSpell('Lightning strike').startingState,
-      getSpell('Shadow bolt').startingState,
+      getSpellDefinition(Fireball).getStartingState(),
+      getSpellDefinition(LightningStrike).getStartingState(),
+      getSpellDefinition(ShadowBolt).getStartingState(),
     ],
     spellSlots: getStartingSpellSlots(),
     currentSlot: 0,
