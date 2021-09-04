@@ -1,6 +1,7 @@
 import { SpellClass, SpellState } from '../spell';
 import { GameDispatch, State } from '../../../App/context';
 import { LightningStrikeAnimation } from '../../animations/spells';
+import damageEffect from '../../spell-effects/damage';
 
 export default class LightningStrike extends SpellClass {
   startingState = {
@@ -8,7 +9,7 @@ export default class LightningStrike extends SpellClass {
     power: 8,
   };
 
-  getDescription(state: State, spellState: SpellState) {
+  getDescription(state: State, spellState: SpellState): string {
     const { power } = spellState;
     const slotPower = state.spellSlots[state.currentSlot].power;
 
@@ -47,11 +48,12 @@ export default class LightningStrike extends SpellClass {
       dispatch({
         type: 'castSpell',
         mutation: (draftState) => {
-          draftState.enemies[target].health -= Math.ceil(totalPower * 0.85);
+          damageEffect(Math.ceil(totalPower * 0.85), target)(draftState);
           secondTarget !== null &&
-            (draftState.enemies[secondTarget].health -= Math.ceil(
-              totalPower * 0.25,
-            ));
+            damageEffect(
+              Math.ceil(totalPower * 0.25),
+              secondTarget,
+            )(draftState);
         },
       });
 

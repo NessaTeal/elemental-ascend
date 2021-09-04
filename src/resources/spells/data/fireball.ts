@@ -1,6 +1,7 @@
 import { SpellClass, SpellState } from '../spell';
 import { GameDispatch, State } from '../../../App/context';
 import { FireballAnimation } from '../../animations/spells';
+import damageEffect from '../../spell-effects/damage';
 
 export default class Fireball extends SpellClass {
   startingState = {
@@ -8,7 +9,7 @@ export default class Fireball extends SpellClass {
     power: 10,
   };
 
-  getDescription(state: State, spellState: SpellState) {
+  getDescription(state: State, spellState: SpellState): string {
     const { power } = spellState;
     const slotPower = state.spellSlots[state.currentSlot].power;
 
@@ -31,9 +32,7 @@ export default class Fireball extends SpellClass {
 
       dispatch({
         type: 'castSpell',
-        mutation: (draftState) => {
-          draftState.enemies[target].health -= totalPower;
-        },
+        mutation: damageEffect(totalPower, target),
       });
 
       resolve();

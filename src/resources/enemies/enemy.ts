@@ -36,8 +36,10 @@ export abstract class EnemyClass {
   abstract getActionWrappers(): EnemyActionWrapper[];
 }
 
+export type EnemyAfflictionType = 'curse';
+
 export type EnemyAffliction = {
-  type: 'curse';
+  type: EnemyAfflictionType;
   stacks: number;
 };
 

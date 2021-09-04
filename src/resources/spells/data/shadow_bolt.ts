@@ -1,7 +1,8 @@
 import { SpellClass, SpellState } from '../spell';
 import { GameDispatch, State } from '../../../App/context';
-import { EnemyAffliction } from '../../enemies/enemy';
 import { ShadowBoltAnimation } from '../../animations/spells';
+import afflictionEffect from '../../spell-effects/affliction';
+import damageEffect from '../../spell-effects/damage';
 
 export default class ShadowBolt extends SpellClass {
   startingState = {
@@ -9,7 +10,7 @@ export default class ShadowBolt extends SpellClass {
     power: 6,
   };
 
-  getDescription(state: State, spellState: SpellState) {
+  getDescription(state: State, spellState: SpellState): string {
     const { power } = spellState;
     const slotPower = state.spellSlots[state.currentSlot].power;
 
@@ -33,22 +34,8 @@ export default class ShadowBolt extends SpellClass {
       dispatch({
         type: 'castSpell',
         mutation: (draftState) => {
-          const curse = draftState.enemies[target].afflictions.find(
-            (a: EnemyAffliction) => a.type === 'curse',
-          );
-
-          let stacks = 1;
-
-          if (curse) {
-            stacks = ++curse.stacks;
-          } else {
-            draftState.enemies[target].afflictions.push({
-              type: 'curse',
-              stacks: 1,
-            });
-          }
-
-          draftState.enemies[target].health -= totalPower * stacks;
+          const curse = afflictionEffect(1, 'curse', target)(draftState);
+          damageEffect(totalPower * curse, target)(draftState);
         },
       });
 
