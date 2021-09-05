@@ -2,13 +2,15 @@ import { State, GameDispatch } from '../../App/context';
 import { EnemyActionWrapper } from '../actions';
 
 export abstract class EnemyClass {
-  constructor(state: MinimalEnemyState) {
-    this.startingState = {
+  protected abstract readonly startingState: MinimalEnemyState;
+
+  getStartingState(): EnemyState {
+    return {
+      ...this.startingState,
       currentAction: 0,
-      maxHealth: state.health,
+      maxHealth: this.startingState.health,
       afflictions: [],
       handle: this.constructor as EnemyConstructor,
-      ...state,
     };
   }
   async act(
@@ -31,8 +33,6 @@ export abstract class EnemyClass {
       },
     });
   }
-
-  startingState!: EnemyState;
 
   abstract getActionWrappers(): EnemyActionWrapper[];
 }

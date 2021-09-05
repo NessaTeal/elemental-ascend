@@ -107,7 +107,7 @@ export function Provider({
   importAll();
   const [state, dispatch] = useThunkReducer(reducer, {
     playerHealth: 100,
-    enemies: getEncounter(0).enemies.map((e) => getEnemy(e).startingState),
+    enemies: getEncounter(0).enemies.map((e) => getEnemy(e).getStartingState()),
     spells: [
       getSpellDefinition(Fireball).getStartingState(),
       getSpellDefinition(LightningStrike).getStartingState(),
