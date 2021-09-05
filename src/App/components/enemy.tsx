@@ -1,4 +1,5 @@
 import React from 'react';
+
 import { EnemyState } from '../../resources/enemies/enemy';
 
 export interface EnemyProps extends EnemyState {

@@ -1,7 +1,7 @@
-import { SpellClass, SpellState } from '../spell';
 import { GameDispatch, State } from '../../../App/context';
 import { LightningStrikeAnimation } from '../../animations/spells';
 import damageEffect from '../../spell-effects/damage';
+import { SpellClass, SpellState } from '../spell';
 
 export default class LightningStrike extends SpellClass {
   startingState = {

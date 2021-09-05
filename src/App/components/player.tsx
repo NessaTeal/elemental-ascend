@@ -1,4 +1,5 @@
 import React from 'react';
+
 import { useState } from '../context';
 
 const Player: React.FC = () => {

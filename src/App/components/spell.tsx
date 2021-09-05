@@ -1,5 +1,6 @@
-import React from 'react';
 import cx from 'classnames';
+import React from 'react';
+
 import { SpellState } from '../../resources/spells/spell';
 
 export interface SpellProps extends SpellState {

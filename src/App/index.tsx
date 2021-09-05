@@ -1,8 +1,10 @@
-import React from 'react';
 import './style.css';
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
-import MainMenu from './pages/main-menu';
+
+import React from 'react';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+
 import Game from './pages/game';
+import MainMenu from './pages/main-menu';
 
 const App: React.FC = () => {
   return (

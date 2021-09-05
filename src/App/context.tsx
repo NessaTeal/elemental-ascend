@@ -1,18 +1,19 @@
-import React, { ReactElement, Dispatch } from 'react';
-import { EnemyState } from '../resources/enemies/enemy';
-import { SpellState } from '../resources/spells/spell';
+import produce from 'immer';
+import React, { Dispatch, ReactElement } from 'react';
+import useThunkReducer, { Thunk } from 'react-hook-thunk-reducer';
+
 import importAll, {
-  getSpellDefinition,
-  getEnemy,
   getEncounter,
+  getEnemy,
+  getSpellDefinition,
   getStartingSpellSlots,
 } from '../resources';
+import { EnemyState } from '../resources/enemies/enemy';
 import { SpellSlotState } from '../resources/spell-slots/spell-slot';
-import useThunkReducer, { Thunk } from 'react-hook-thunk-reducer';
-import produce from 'immer';
 import Fireball from '../resources/spells/data/fireball';
 import LightningStrike from '../resources/spells/data/lightning_strike';
 import ShadowBolt from '../resources/spells/data/shadow_bolt';
+import { SpellState } from '../resources/spells/spell';
 
 export interface State {
   playerHealth: number;

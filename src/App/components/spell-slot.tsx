@@ -1,5 +1,6 @@
-import React from 'react';
 import cx from 'classnames';
+import React from 'react';
+
 import { SpellSlotState } from '../../resources/spell-slots/spell-slot';
 
 export interface SpellSlotProps extends SpellSlotState {

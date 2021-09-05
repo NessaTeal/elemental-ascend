@@ -1,8 +1,8 @@
-import { GameAnimation } from '../animations';
-import { State, GameDispatch } from '../../App/context';
-import { EnemyState } from '../enemies/enemy';
+import { GameDispatch, State } from '../../App/context';
 import { getEnemy, getSpellDefinition } from '..';
+import { GameAnimation } from '../animations';
 import { EnemyDiesAnimation } from '../animations/enemies';
+import { EnemyState } from '../enemies/enemy';
 
 export type EnemyActionWrapper = {
   getAnimation: (enemy: number, state: State) => GameAnimation;

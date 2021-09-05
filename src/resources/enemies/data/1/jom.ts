@@ -1,9 +1,9 @@
-import { EnemyClass } from '../../enemy';
 import { EnemyActionWrapper } from '../../../actions';
 import {
   createAttackEnemyAction,
   createEnemySelfHealAction,
 } from '../../../actions/enemies';
+import { EnemyClass } from '../../enemy';
 
 export default class Jom extends EnemyClass {
   startingState = {

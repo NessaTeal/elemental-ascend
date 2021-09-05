@@ -1,7 +1,8 @@
 import React from 'react';
-import { useState, useDispatch } from '../context';
-import Spell from './spell';
+
 import { getSpellDefinition } from '../../resources';
+import { useDispatch, useState } from '../context';
+import Spell from './spell';
 
 const SpellBook: React.FC = () => {
   const state = useState();

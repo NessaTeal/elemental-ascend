@@ -1,9 +1,10 @@
-import { State } from '../../App/context';
 import anime from 'animejs';
+
+import { State } from '../../App/context';
 import {
   GameAnimation,
-  getPlayerPosition,
   getEnemyPosition,
+  getPlayerPosition,
   getScene,
 } from '.';
 

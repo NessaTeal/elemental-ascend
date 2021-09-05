@@ -1,15 +1,15 @@
-import { EnemyClass, EnemyConstructor, EnemyState } from './enemies/enemy';
 import { Encounter } from './encounters/encounter';
-import importspellSlots, {
-  SpellSlotStorage,
-  SpellSlotState,
-} from './spell-slots/spell-slot';
-import importSpells from './spells/spellLoader';
-import { SpellClass, SpellConstructor, SpellState } from './spells/spell';
 import importEncounters, {
   EncounterStorage,
 } from './encounters/encounterLoader';
+import { EnemyClass, EnemyConstructor, EnemyState } from './enemies/enemy';
 import importEnemies, { EnemyStorage } from './enemies/enemyLoader';
+import importspellSlots, {
+  SpellSlotState,
+  SpellSlotStorage,
+} from './spell-slots/spell-slot';
+import { SpellClass, SpellConstructor, SpellState } from './spells/spell';
+import importSpells from './spells/spellLoader';
 
 let spells: SpellClass[] = [];
 

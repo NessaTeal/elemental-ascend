@@ -1,8 +1,8 @@
-import { SpellClass, SpellState } from '../spell';
 import { GameDispatch, State } from '../../../App/context';
 import { ShadowBoltAnimation } from '../../animations/spells';
 import afflictionEffect from '../../spell-effects/affliction';
 import damageEffect from '../../spell-effects/damage';
+import { SpellClass, SpellState } from '../spell';
 
 export default class ShadowBolt extends SpellClass {
   startingState = {

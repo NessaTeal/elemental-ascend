@@ -1,8 +1,8 @@
 import { State } from '../../App/context';
 import { GameAnimation } from '../animations';
 import {
-  GenericEnemyHealAnimation,
   GenericEnemyAttackAnimation,
+  GenericEnemyHealAnimation,
 } from '../animations/enemies';
 import { EnemyState } from '../enemies/enemy';
 

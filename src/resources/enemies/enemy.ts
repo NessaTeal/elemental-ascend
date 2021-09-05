@@ -1,4 +1,4 @@
-import { State, GameDispatch } from '../../App/context';
+import { GameDispatch, State } from '../../App/context';
 import { EnemyActionWrapper } from '../actions';
 
 export abstract class EnemyClass {

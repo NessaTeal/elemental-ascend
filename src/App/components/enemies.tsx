@@ -1,8 +1,9 @@
 import React from 'react';
-import { useState, useDispatch } from '../context';
-import Enemy from './enemy';
+
 import { getEnemy } from '../../resources';
 import { makeATurn } from '../../resources/actions';
+import { useDispatch, useState } from '../context';
+import Enemy from './enemy';
 
 const Enemies: React.FC = () => {
   const state = useState();
