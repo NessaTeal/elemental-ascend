@@ -23,19 +23,15 @@ export default class Fireball extends SpellClass {
     state: State,
     dispatch: GameDispatch,
   ): Promise<void> {
-    return new Promise(async (resolve) => {
-      await new FireballAnimation(target, state).animate();
+    await new FireballAnimation(target, state).animate();
 
-      const { power } = state.spells[state.currentSpell];
-      const slotPower = state.spellSlots[state.currentSlot].power;
-      const totalPower = Math.ceil(power * slotPower);
+    const { power } = state.spells[state.currentSpell];
+    const slotPower = state.spellSlots[state.currentSlot].power;
+    const totalPower = Math.ceil(power * slotPower);
 
-      dispatch({
-        type: 'castSpell',
-        mutation: damageEffect(totalPower, target),
-      });
-
-      resolve();
+    dispatch({
+      type: 'castSpell',
+      mutation: damageEffect(totalPower, target),
     });
   }
 }

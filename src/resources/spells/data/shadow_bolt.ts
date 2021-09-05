@@ -24,22 +24,18 @@ export default class ShadowBolt extends SpellClass {
     state: State,
     dispatch: GameDispatch,
   ): Promise<void> {
-    return new Promise(async (resolve) => {
-      await new ShadowBoltAnimation(target, state).animate();
+    await new ShadowBoltAnimation(target, state).animate();
 
-      const { power } = state.spells[state.currentSpell];
-      const slotPower = state.spellSlots[state.currentSlot].power;
-      const totalPower = Math.ceil(power * slotPower);
+    const { power } = state.spells[state.currentSpell];
+    const slotPower = state.spellSlots[state.currentSlot].power;
+    const totalPower = Math.ceil(power * slotPower);
 
-      dispatch({
-        type: 'castSpell',
-        mutation: (draftState) => {
-          const curse = afflictionEffect(1, 'curse', target)(draftState);
-          damageEffect(totalPower * curse, target)(draftState);
-        },
-      });
-
-      resolve();
+    dispatch({
+      type: 'castSpell',
+      mutation: (draftState) => {
+        const curse = afflictionEffect(1, 'curse', target)(draftState);
+        damageEffect(totalPower * curse, target)(draftState);
+      },
     });
   }
 }

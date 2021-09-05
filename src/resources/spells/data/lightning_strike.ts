@@ -25,39 +25,29 @@ export default class LightningStrike extends SpellClass {
     state: State,
     dispatch: GameDispatch,
   ): Promise<void> {
-    return new Promise(async (resolve) => {
-      const { enemies } = state;
-      let secondTarget: number | null;
-      if (enemies.length === 1) {
-        secondTarget = null;
-      } else {
-        do {
-          secondTarget = Math.floor(Math.random() * enemies.length);
-        } while (secondTarget === target);
-      }
+    const { enemies } = state;
+    let secondTarget: number | null;
+    if (enemies.length === 1) {
+      secondTarget = null;
+    } else {
+      do {
+        secondTarget = Math.floor(Math.random() * enemies.length);
+      } while (secondTarget === target);
+    }
 
-      await new LightningStrikeAnimation(
-        [target, secondTarget],
-        state,
-      ).animate();
+    await new LightningStrikeAnimation([target, secondTarget], state).animate();
 
-      const { power } = state.spells[state.currentSpell];
-      const slotPower = state.spellSlots[state.currentSlot].power;
-      const totalPower = Math.ceil(power * slotPower);
+    const { power } = state.spells[state.currentSpell];
+    const slotPower = state.spellSlots[state.currentSlot].power;
+    const totalPower = Math.ceil(power * slotPower);
 
-      dispatch({
-        type: 'castSpell',
-        mutation: (draftState) => {
-          damageEffect(Math.ceil(totalPower * 0.85), target)(draftState);
-          secondTarget !== null &&
-            damageEffect(
-              Math.ceil(totalPower * 0.25),
-              secondTarget,
-            )(draftState);
-        },
-      });
-
-      resolve();
+    dispatch({
+      type: 'castSpell',
+      mutation: (draftState) => {
+        damageEffect(Math.ceil(totalPower * 0.85), target)(draftState);
+        secondTarget !== null &&
+          damageEffect(Math.ceil(totalPower * 0.25), secondTarget)(draftState);
+      },
     });
   }
 }
