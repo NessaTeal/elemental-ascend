@@ -1,5 +1,5 @@
 import { GameDispatch, State } from '../../App/context';
-import { getEnemy, getSpellDefinition } from '..';
+import { getEncounter, getEnemy, getSpellDefinition } from '..';
 import { GameAnimation } from '../animations';
 import { EnemyDiesAnimation } from '../animations/enemies';
 import { EnemyState } from '../enemies/enemy';
@@ -47,10 +47,17 @@ export async function makeATurn(
       for (let i = 0; i < aliveEnemies.length; i++) {
         await getEnemy(aliveEnemies[i]).act(i, getState(), dispatch);
       }
-
-      dispatch({ type: 'startTurn' });
     } else {
-      // you killed everyone
+      dispatch({
+        type: 'newEncounter',
+        mutation: (state: State) => {
+          state.enemies = getEncounter(0).enemies.map((e) =>
+            getEnemy(e).getStartingState(),
+          );
+        },
+      });
     }
+
+    dispatch({ type: 'startTurn' });
   });
 }

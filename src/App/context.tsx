@@ -33,7 +33,8 @@ export type Action =
   | EndTurnAction
   | StartTurnAction
   | EnemyDiedAction
-  | CastSpellAction;
+  | CastSpellAction
+  | NewEncounterAction;
 export type ChangeSpellAction = {
   type: 'changeSpell';
   spell: number;
@@ -56,6 +57,10 @@ export type CastSpellAction = {
   type: 'castSpell';
   mutation: (state: State) => void;
 };
+export type NewEncounterAction = {
+  type: 'newEncounter';
+  mutation: (state: State) => void;
+};
 const DispatchContext = React.createContext<GameDispatch | undefined>(
   undefined,
 );
@@ -67,9 +72,6 @@ function reducer(state: State, action: Action) {
         ...state,
         currentSpell: action.spell,
       };
-    }
-    case 'enemyAction': {
-      return produce(state, action.mutation);
     }
     case 'endTurn': {
       return {
@@ -94,7 +96,9 @@ function reducer(state: State, action: Action) {
         ),
       };
     }
-    case 'castSpell': {
+    case 'enemyAction':
+    case 'castSpell':
+    case 'newEncounter': {
       return produce(state, action.mutation);
     }
   }
