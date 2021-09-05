@@ -45,7 +45,7 @@ export async function makeATurn(
 
     if (aliveEnemies.length > 0) {
       for (let i = 0; i < aliveEnemies.length; i++) {
-        await getEnemy(enemies[i]).act(i, getState(), dispatch);
+        await getEnemy(aliveEnemies[i]).act(i, getState(), dispatch);
       }
 
       dispatch({ type: 'startTurn' });
