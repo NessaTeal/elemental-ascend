@@ -7,6 +7,7 @@ export abstract class EnemyClass {
       currentAction: 0,
       maxHealth: state.health,
       afflictions: [],
+      handle: this.constructor as EnemyConstructor,
       ...state,
     };
   }
@@ -36,6 +37,10 @@ export abstract class EnemyClass {
   abstract getActionWrappers(): EnemyActionWrapper[];
 }
 
+export interface EnemyConstructor extends Function {
+  new (): EnemyClass;
+}
+
 export type EnemyAfflictionType = 'curse';
 
 export type EnemyAffliction = {
@@ -51,24 +56,6 @@ type MinimalEnemyState = {
   afflictions?: EnemyAffliction[];
 };
 
-export type EnemyState = Required<MinimalEnemyState>;
-
-export type EnemyStorage = {
-  name: string;
-  level: number;
-  enemy: EnemyClass;
+export type EnemyState = Required<MinimalEnemyState> & {
+  handle: EnemyConstructor;
 };
-
-export default function importEnemies(): EnemyStorage[] {
-  const modules = require.context('./data', true, /.*(?!ts)$/);
-  const enemies: EnemyStorage[] = [];
-
-  modules.keys().forEach((m) => {
-    const [, levelStr, name] = m.split('/');
-    const level = Number(levelStr);
-    const enemy = modules(m).default();
-    enemies.push({ name, level, enemy });
-  });
-
-  return enemies;
-}

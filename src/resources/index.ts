@@ -1,4 +1,4 @@
-import importEnemies, { EnemyClass, EnemyStorage } from './enemies/enemy';
+import { EnemyClass, EnemyConstructor, EnemyState } from './enemies/enemy';
 import { Encounter } from './encounters/encounter';
 import importspellSlots, {
   SpellSlotStorage,
@@ -9,6 +9,7 @@ import { SpellClass, SpellConstructor, SpellState } from './spells/spell';
 import importEncounters, {
   EncounterStorage,
 } from './encounters/encounterLoader';
+import importEnemies, { EnemyStorage } from './enemies/enemyLoader';
 
 let spells: SpellClass[] = [];
 
@@ -28,13 +29,14 @@ export function getSpellDefinition(
 
 let enemies: EnemyStorage[] = [];
 
-export function getEnemy(name: string): EnemyClass {
-  const enemyState = enemies.find(
-    (e) => e.name === name || e.enemy.startingState.name === name,
-  )?.enemy;
+export function getEnemy(enemy: EnemyConstructor | EnemyState): EnemyClass {
+  if (typeof enemy === 'object') {
+    enemy = enemy.handle;
+  }
+  const enemyState = enemies.find((e) => e.enemy.constructor === enemy)?.enemy;
 
   if (!enemyState) {
-    throw Error(`No entry found for enemy ${name}`);
+    throw Error(`No entry found for enemy ${enemy}`);
   }
 
   return enemyState;

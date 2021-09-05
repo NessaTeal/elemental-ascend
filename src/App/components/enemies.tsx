@@ -18,7 +18,7 @@ const Enemies: React.FC = () => {
             <div key={e.name} id={`enemy-${index}`}>
               <Enemy
                 {...e}
-                actionDescription={getEnemy(e.name)
+                actionDescription={getEnemy(e)
                   .getActionWrappers()
                   [e.currentAction].getDescription(state, e)}
                 onClick={() => {

@@ -2,7 +2,7 @@ import { EnemyClass } from '../../enemy';
 import { EnemyActionWrapper } from '../../../actions';
 import { createAttackEnemyAction } from '../../../actions/enemies';
 
-export class Wolfie extends EnemyClass {
+export default class Wolfie extends EnemyClass {
   constructor() {
     super({
       name: 'Wolfie',
@@ -14,5 +14,3 @@ export class Wolfie extends EnemyClass {
     return [createAttackEnemyAction(10), createAttackEnemyAction(15)];
   }
 }
-
-export default (): Wolfie => new Wolfie();

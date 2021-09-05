@@ -5,7 +5,7 @@ import {
   createEnemySelfHealAction,
 } from '../../../actions/enemies';
 
-export class Jom extends EnemyClass {
+export default class Jom extends EnemyClass {
   constructor() {
     super({
       name: 'Jom',
@@ -17,5 +17,3 @@ export class Jom extends EnemyClass {
     return [createAttackEnemyAction(10), createEnemySelfHealAction(20)];
   }
 }
-
-export default (): Jom => new Jom();
