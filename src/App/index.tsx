@@ -17,6 +17,9 @@ const App = (): JSX.Element => {
           <Route path="/game">
             <Game />
           </Route>
+          <Route path="/about">
+            <div>A good game :3</div>
+          </Route>
         </Switch>
       </Router>
     </div>
