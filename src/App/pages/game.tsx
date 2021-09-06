@@ -5,7 +5,7 @@ import Player from '../components/player';
 import SpellBook from '../components/spell-book';
 import SpellChain from '../components/spell-chain';
 
-const Game: React.FC = () => {
+const Game = (): JSX.Element => {
   return (
     <>
       <div className="scene" id="scene">

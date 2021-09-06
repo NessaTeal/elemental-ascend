@@ -3,7 +3,7 @@ import React from 'react';
 import { useState } from '../context';
 import SpellSlot from './spell-slot';
 
-const SpellChain: React.FC = () => {
+const SpellChain = (): JSX.Element => {
   const { spellSlots, currentSlot } = useState();
 
   return (

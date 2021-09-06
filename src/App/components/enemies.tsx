@@ -5,7 +5,7 @@ import { makeATurn } from '../../resources/actions';
 import { useDispatch, useState } from '../context';
 import Enemy from './enemy';
 
-const Enemies: React.FC = () => {
+const Enemies = (): JSX.Element => {
   const state = useState();
   const { enemies, playerTurn } = state;
   const dispatch = useDispatch();

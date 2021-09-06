@@ -2,7 +2,7 @@ import React from 'react';
 
 import { useState } from '../context';
 
-const Player: React.FC = () => {
+const Player = (): JSX.Element => {
   const { playerHealth } = useState();
 
   return (

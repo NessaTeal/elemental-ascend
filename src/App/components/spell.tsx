@@ -9,12 +9,12 @@ export interface SpellProps extends SpellState {
   onClick: () => void;
 }
 
-const Spell: React.FC<SpellProps> = ({
+const Spell = ({
   name,
   active,
   description,
   onClick,
-}: SpellProps) => {
+}: SpellProps): JSX.Element => {
   return (
     <div className={cx('spell', { active })} onClick={onClick}>
       <p>{name}</p>

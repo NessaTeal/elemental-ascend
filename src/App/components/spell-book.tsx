@@ -4,7 +4,7 @@ import { getSpellDefinition } from '../../resources';
 import { useDispatch, useState } from '../context';
 import Spell from './spell';
 
-const SpellBook: React.FC = () => {
+const SpellBook = (): JSX.Element => {
   const state = useState();
   const { spells, currentSpell } = state;
   const dispatch = useDispatch();

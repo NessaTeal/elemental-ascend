@@ -7,14 +7,14 @@ export interface EnemyProps extends EnemyState {
   onClick?: () => void;
 }
 
-const Enemy: React.FC<EnemyProps> = ({
+const Enemy = ({
   name,
   health,
   maxHealth,
   afflictions,
   actionDescription,
   onClick,
-}: EnemyProps) => {
+}: EnemyProps): JSX.Element => {
   return (
     <div className="enemy" onClick={onClick}>
       <div className="top">{name}</div>

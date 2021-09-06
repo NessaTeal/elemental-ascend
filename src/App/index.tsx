@@ -6,7 +6,7 @@ import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import Game from './pages/game';
 import MainMenu from './pages/main-menu';
 
-const App: React.FC = () => {
+const App = (): JSX.Element => {
   return (
     <div className="App">
       <Router>
