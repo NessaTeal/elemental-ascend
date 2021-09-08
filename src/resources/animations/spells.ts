@@ -121,6 +121,7 @@ export class ShadowBoltAnimation implements GameAnimation {
       targets: div,
       translateX: xDiff,
       easing: 'easeOutCubic',
+      duration: 350,
       changeComplete: () => getScene().removeChild(div),
     });
 
