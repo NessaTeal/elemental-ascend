@@ -8,7 +8,13 @@ const Player = (): JSX.Element => {
   return (
     <div className="player" id="player">
       <div>Player</div>
-      <div>HP: {playerHealth}</div>
+      {playerHealth < -1000000000 ? (
+        <div>Come on, I said you are dead!</div>
+      ) : playerHealth > 0 ? (
+        <div>HP: {playerHealth}</div>
+      ) : (
+        <div>You are very dead</div>
+      )}
     </div>
   );
 };
