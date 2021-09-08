@@ -7,7 +7,7 @@ import { EnemyClass } from '../../enemy';
 export default class FunBreaker extends EnemyClass {
   startingState = {
     name: 'FunBreaker',
-    health: 100,
+    health: 100000,
   };
 
   getActionWrappers(): EnemyActionWrapper[] {
