@@ -25,7 +25,7 @@ export interface State {
   currentSlot: number;
   currentSpell: number;
   playerTurn: boolean;
-  level: 0;
+  level: number;
 }
 const StateContext = React.createContext<State | undefined>(undefined);
 
@@ -139,7 +139,7 @@ export function Provider({
     currentSlot: 0,
     currentSpell: 0,
     playerTurn: true,
-    level: 0,
+    level: 1,
   });
 
   return (
