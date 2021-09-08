@@ -9,6 +9,7 @@ import importAll, {
   getStartingSpellSlots,
 } from '../resources';
 import { EnemyState } from '../resources/enemies/enemy';
+import { RewardState } from '../resources/rewards/reward';
 import { SpellSlotState } from '../resources/spell-slots/spell-slot';
 import Fireball from '../resources/spells/data/fireball';
 import LightningStrike from '../resources/spells/data/lightning_strike';
@@ -18,6 +19,7 @@ import { SpellState } from '../resources/spells/spell';
 export interface State {
   playerHealth: number;
   enemies: EnemyState[];
+  rewards: RewardState[];
   spells: SpellState[];
   spellSlots: SpellSlotState[];
   currentSlot: number;
@@ -34,7 +36,8 @@ export type Action =
   | StartTurnAction
   | EnemyDiedAction
   | CastSpellAction
-  | NewEncounterAction;
+  | NewEncounterAction
+  | TakeRewardAction;
 export type ChangeSpellAction = {
   type: 'changeSpell';
   spell: number;
@@ -59,6 +62,10 @@ export type CastSpellAction = {
 };
 export type NewEncounterAction = {
   type: 'newEncounter';
+  mutation: (state: State) => void;
+};
+export type TakeRewardAction = {
+  type: 'takeReward';
   mutation: (state: State) => void;
 };
 const DispatchContext = React.createContext<GameDispatch | undefined>(
@@ -101,6 +108,15 @@ function reducer(state: State, action: Action) {
     case 'newEncounter': {
       return produce(state, action.mutation);
     }
+    case 'takeReward': {
+      return produce(state, (state: State) => {
+        action.mutation(state);
+        state.rewards = [];
+        state.enemies = getEncounter(0).enemies.map((e) =>
+          new e().getStartingState(),
+        );
+      });
+    }
   }
 }
 
@@ -113,6 +129,7 @@ export function Provider({
   const [state, dispatch] = useThunkReducer(reducer, {
     playerHealth: 100,
     enemies: getEncounter(0).enemies.map((e) => getEnemy(e).getStartingState()),
+    rewards: [],
     spells: [
       getSpellDefinition(Fireball).getStartingState(),
       getSpellDefinition(LightningStrike).getStartingState(),

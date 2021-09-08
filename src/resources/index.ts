@@ -4,6 +4,8 @@ import importEncounters, {
 } from './encounters/encounterLoader';
 import { EnemyClass, EnemyConstructor, EnemyState } from './enemies/enemy';
 import importEnemies, { EnemyStorage } from './enemies/enemyLoader';
+import { RewardClass, RewardConstructor, RewardState } from './rewards/reward';
+import importRewards from './rewards/rewardLoader';
 import importspellSlots, {
   SpellSlotState,
   SpellSlotStorage,
@@ -58,6 +60,27 @@ export function getEncounter(level: number): Encounter {
   return possibleEncounters[Math.floor(Math.random() * amount)];
 }
 
+let rewards: RewardClass[] = [];
+
+export function getReward(
+  reward: RewardConstructor | RewardState,
+): RewardClass {
+  if (typeof reward === 'object') {
+    reward = reward.handle;
+  }
+  const rewardClass = rewards.find((r) => r.constructor === reward);
+
+  if (!rewardClass) {
+    throw Error(`No entry found for reward ${reward}`);
+  }
+
+  return rewardClass;
+}
+
+export function getRandomRewards(): RewardState[] {
+  return rewards.map((r) => r.getStartingState());
+}
+
 let spellSlots: SpellSlotStorage[] = [];
 
 export function getStartingSpellSlots(): SpellSlotState[] {
@@ -69,4 +92,5 @@ export default function importAll(): void {
   spells = importSpells();
   encounters = importEncounters();
   spellSlots = importspellSlots();
+  rewards = importRewards();
 }

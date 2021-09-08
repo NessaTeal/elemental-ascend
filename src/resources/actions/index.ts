@@ -1,5 +1,5 @@
 import { GameDispatch, State } from '../../App/context';
-import { getEncounter, getEnemy, getSpellDefinition } from '..';
+import { getEnemy, getRandomRewards, getSpellDefinition } from '..';
 import { EnemyDiesAnimation } from '../animations/enemies';
 
 export async function makeATurn(
@@ -43,9 +43,7 @@ export async function makeATurn(
       dispatch({
         type: 'newEncounter',
         mutation: (state: State) => {
-          state.enemies = getEncounter(0).enemies.map((e) =>
-            getEnemy(e).getStartingState(),
-          );
+          state.rewards = getRandomRewards();
         },
       });
     }
