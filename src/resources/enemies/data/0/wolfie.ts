@@ -1,5 +1,7 @@
-import { EnemyActionWrapper } from '../../../actions';
-import { createAttackEnemyAction } from '../../../actions/enemies';
+import {
+  createAttackEnemyAction,
+  EnemyActionWrapper,
+} from '../../../actions/enemies';
 import { EnemyClass } from '../../enemy';
 
 export default class Wolfie extends EnemyClass {

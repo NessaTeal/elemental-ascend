@@ -1,14 +1,6 @@
 import { GameDispatch, State } from '../../App/context';
 import { getEncounter, getEnemy, getSpellDefinition } from '..';
-import { GameAnimation } from '../animations';
 import { EnemyDiesAnimation } from '../animations/enemies';
-import { EnemyState } from '../enemies/enemy';
-
-export type EnemyActionWrapper = {
-  getAnimation: (enemy: number, state: State) => GameAnimation;
-  getDescription: (state: State, enemyState: EnemyState) => string;
-  getAction: (enemy: number, state: State) => void;
-};
 
 export async function makeATurn(
   originalTarget: number,

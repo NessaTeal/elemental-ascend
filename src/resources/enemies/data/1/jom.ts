@@ -1,7 +1,7 @@
-import { EnemyActionWrapper } from '../../../actions';
 import {
   createAttackEnemyAction,
   createEnemySelfHealAction,
+  EnemyActionWrapper,
 } from '../../../actions/enemies';
 import { EnemyClass } from '../../enemy';
 

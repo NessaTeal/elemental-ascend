@@ -1,5 +1,5 @@
 import { GameDispatch, State } from '../../App/context';
-import { EnemyActionWrapper } from '../actions';
+import { EnemyActionWrapper } from '../actions/enemies';
 
 export abstract class EnemyClass {
   protected abstract readonly startingState: MinimalEnemyState;
