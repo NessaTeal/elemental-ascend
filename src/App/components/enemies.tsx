@@ -15,8 +15,7 @@ const Enemies = (): JSX.Element => {
       <div className="enemies">
         {enemies.map((e, index) => {
           return (
-            // key should be super unique id
-            <div key={e.name} id={`enemy-${index}`}>
+            <div key={e.name} id={e.id}>
               <Enemy
                 {...e}
                 actionDescription={getEnemy(e)

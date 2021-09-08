@@ -19,16 +19,16 @@ export async function makeATurn(
 
     const { enemies } = getState();
 
-    const diedEnemies = enemies.reduce((acc: number[], cur, index) => {
+    const diedEnemies = enemies.reduce((acc: string[], cur) => {
       if (cur.health <= 0) {
-        acc.push(index);
+        acc.push(cur.id);
       }
 
       return acc;
     }, []);
 
     await Promise.all(
-      diedEnemies.map((index) => new EnemyDiesAnimation(index).animate()),
+      diedEnemies.map((id) => new EnemyDiesAnimation(id).animate()),
     );
 
     dispatch({ type: 'enemiesDied', enemies: diedEnemies });

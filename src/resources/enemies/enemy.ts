@@ -1,3 +1,5 @@
+import { v4 as uuid } from 'uuid';
+
 import { GameDispatch, State } from '../../App/context';
 import { EnemyActionWrapper } from '../actions/enemies';
 
@@ -7,6 +9,7 @@ export abstract class EnemyClass {
   getStartingState(): EnemyState {
     return {
       ...this.startingState,
+      id: uuid(),
       currentAction: 0,
       maxHealth: this.startingState.health,
       afflictions: [],
@@ -18,11 +21,11 @@ export abstract class EnemyClass {
     state: State,
     dispatch: GameDispatch,
   ): Promise<void> {
-    const { currentAction } = state.enemies[enemy];
+    const { id, currentAction } = state.enemies[enemy];
     const actionWrappers = this.getActionWrappers();
     const actionWrapper = actionWrappers[currentAction];
 
-    await actionWrapper.getAnimation(enemy, state).animate();
+    await actionWrapper.getAnimation(id).animate();
     dispatch({
       type: 'enemyAction',
       mutation: (draftState) => {
@@ -57,5 +60,6 @@ type MinimalEnemyState = {
 };
 
 export type EnemyState = Required<MinimalEnemyState> & {
+  id: string;
   handle: EnemyConstructor;
 };

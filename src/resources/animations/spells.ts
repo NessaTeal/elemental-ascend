@@ -1,6 +1,5 @@
 import anime from 'animejs';
 
-import { State } from '../../App/context';
 import {
   GameAnimation,
   getEnemyPosition,
@@ -9,12 +8,10 @@ import {
 } from '.';
 
 export class FireballAnimation implements GameAnimation {
-  target: number;
-  state: State;
+  target: string;
 
-  constructor(target: number, state: State) {
+  constructor(target: string) {
     this.target = target;
-    this.state = state;
   }
   animate(): Promise<void> {
     const div = document.createElement('DIV');
@@ -43,12 +40,10 @@ export class FireballAnimation implements GameAnimation {
 }
 
 export class LightningStrikeAnimation implements GameAnimation {
-  targets: [number, number | null];
-  state: State;
+  targets: [string, string | null];
 
-  constructor(targets: [number, number | null], state: State) {
+  constructor(targets: [string, string | null]) {
     this.targets = targets;
-    this.state = state;
   }
   async animate(): Promise<void> {
     const div = document.createElement('DIV');
@@ -97,12 +92,10 @@ export class LightningStrikeAnimation implements GameAnimation {
 }
 
 export class ShadowBoltAnimation implements GameAnimation {
-  target: number;
-  state: State;
+  target: string;
 
-  constructor(target: number, state: State) {
+  constructor(target: string) {
     this.target = target;
-    this.state = state;
   }
   async animate(): Promise<void> {
     const div = document.createElement('DIV');

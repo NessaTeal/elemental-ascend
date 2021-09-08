@@ -1,6 +1,5 @@
 import anime from 'animejs';
 
-import { State } from '../../App/context';
 import {
   GameAnimation,
   getEnemy,
@@ -10,12 +9,10 @@ import {
 } from '.';
 
 export class GenericEnemyAttackAnimation implements GameAnimation {
-  enemy: number;
-  state: State;
+  enemy: string;
 
-  constructor(enemy: number, state: State) {
+  constructor(enemy: string) {
     this.enemy = enemy;
-    this.state = state;
   }
 
   animate(): Promise<void> {
@@ -45,12 +42,10 @@ export class GenericEnemyAttackAnimation implements GameAnimation {
 }
 
 export class GenericEnemyHealAnimation implements GameAnimation {
-  enemy: number;
-  state: State;
+  enemy: string;
 
-  constructor(enemy: number, state: State) {
+  constructor(enemy: string) {
     this.enemy = enemy;
-    this.state = state;
   }
 
   animate(): Promise<void> {
@@ -78,9 +73,9 @@ export class GenericEnemyHealAnimation implements GameAnimation {
 }
 
 export class EnemyDiesAnimation implements GameAnimation {
-  enemy: number;
+  enemy: string;
 
-  constructor(enemy: number) {
+  constructor(enemy: string) {
     this.enemy = enemy;
   }
 

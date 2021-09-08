@@ -23,7 +23,7 @@ export default class Fireball extends SpellClass {
     state: State,
     dispatch: GameDispatch,
   ): Promise<void> {
-    await new FireballAnimation(target, state).animate();
+    await new FireballAnimation(state.enemies[target].id).animate();
 
     const { power } = state.spells[state.currentSpell];
     const slotPower = state.spellSlots[state.currentSlot].power;

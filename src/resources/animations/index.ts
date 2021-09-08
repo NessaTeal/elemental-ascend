@@ -12,8 +12,8 @@ export function getPlayerPosition(): { x: number; y: number } {
   return getObjectPosition(player);
 }
 
-export function getEnemy(index: number): HTMLElement {
-  const enemy = document.getElementById(`enemy-${index}`);
+export function getEnemy(id: string): HTMLElement {
+  const enemy = document.getElementById(id);
 
   if (!enemy) {
     throw Error("Trying to make animation with player which doesn't exist.");
@@ -22,8 +22,8 @@ export function getEnemy(index: number): HTMLElement {
   return enemy;
 }
 
-export function getEnemyPosition(index: number): { x: number; y: number } {
-  return getObjectPosition(getEnemy(index));
+export function getEnemyPosition(id: string): { x: number; y: number } {
+  return getObjectPosition(getEnemy(id));
 }
 
 function getObjectPosition(element: HTMLElement): { x: number; y: number } {

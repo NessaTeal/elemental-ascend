@@ -35,7 +35,10 @@ export default class LightningStrike extends SpellClass {
       } while (secondTarget === target);
     }
 
-    await new LightningStrikeAnimation([target, secondTarget], state).animate();
+    await new LightningStrikeAnimation([
+      state.enemies[target].id,
+      secondTarget !== null ? state.enemies[secondTarget].id : null,
+    ]).animate();
 
     const { power } = state.spells[state.currentSpell];
     const slotPower = state.spellSlots[state.currentSlot].power;

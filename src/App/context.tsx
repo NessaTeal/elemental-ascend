@@ -55,7 +55,7 @@ export type StartTurnAction = {
 };
 export type EnemyDiedAction = {
   type: 'enemiesDied';
-  enemies: number[];
+  enemies: string[];
 };
 export type CastSpellAction = {
   type: 'castSpell';
@@ -99,9 +99,7 @@ function reducer(state: State, action: Action) {
     case 'enemiesDied': {
       return {
         ...state,
-        enemies: state.enemies.filter(
-          (_, index) => !action.enemies.includes(index),
-        ),
+        enemies: state.enemies.filter((e) => !action.enemies.includes(e.id)),
       };
     }
     case 'enemyAction':

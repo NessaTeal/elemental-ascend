@@ -7,15 +7,14 @@ import {
 import { EnemyState } from '../enemies/enemy';
 
 export type EnemyActionWrapper = {
-  getAnimation: (enemy: number, state: State) => GameAnimation;
+  getAnimation: (enemyId: string) => GameAnimation;
   getDescription: (state: State, enemyState: EnemyState) => string;
   getAction: (enemy: number, state: State) => void;
 };
 
 export function createAttackEnemyAction(damage: number): EnemyActionWrapper {
   return {
-    getAnimation: (enemy: number, state: State) =>
-      new GenericEnemyAttackAnimation(enemy, state),
+    getAnimation: (enemyId: string) => new GenericEnemyAttackAnimation(enemyId),
     getDescription: () => `Deal ${damage} damage`,
     getAction: (_, state) => {
       state.playerHealth -= damage;
@@ -25,8 +24,7 @@ export function createAttackEnemyAction(damage: number): EnemyActionWrapper {
 
 export function createEnemySelfHealAction(heal: number): EnemyActionWrapper {
   return {
-    getAnimation: (enemy: number, state: State) =>
-      new GenericEnemyHealAnimation(enemy, state),
+    getAnimation: (enemyId: string) => new GenericEnemyHealAnimation(enemyId),
     getDescription: () => `Heal ${heal} hp`,
     getAction: (enemy, state) => {
       state.enemies[enemy].health = Math.min(
