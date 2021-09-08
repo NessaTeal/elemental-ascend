@@ -25,6 +25,7 @@ export interface State {
   currentSlot: number;
   currentSpell: number;
   playerTurn: boolean;
+  level: 0;
 }
 const StateContext = React.createContext<State | undefined>(undefined);
 
@@ -112,9 +113,10 @@ function reducer(state: State, action: Action) {
       return produce(state, (state: State) => {
         action.mutation(state);
         state.rewards = [];
-        state.enemies = getEncounter(0).enemies.map((e) =>
-          new e().getStartingState(),
+        state.enemies = getEncounter(Math.floor(state.level / 2)).enemies.map(
+          (e) => new e().getStartingState(),
         );
+        state.level++;
       });
     }
   }
@@ -139,6 +141,7 @@ export function Provider({
     currentSlot: 0,
     currentSpell: 0,
     playerTurn: true,
+    level: 0,
   });
 
   return (
