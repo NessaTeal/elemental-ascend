@@ -17,6 +17,16 @@ export async function makeATurn(
       dispatch,
     );
 
+    await Promise.all(
+      (spells[currentSpell].additionalSpells ?? []).map((additionalSpell) =>
+        getSpellDefinition(additionalSpell).cast(
+          originalTarget,
+          getState(),
+          dispatch,
+        ),
+      ),
+    );
+
     const { enemies } = getState();
 
     const diedEnemies = enemies.reduce((acc: string[], cur) => {

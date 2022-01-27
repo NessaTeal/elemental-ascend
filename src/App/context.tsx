@@ -14,6 +14,7 @@ import { SpellSlotState } from '../resources/spell-slots/spell-slot';
 import Fireball from '../resources/spells/data/fireball';
 import LightningStrike from '../resources/spells/data/lightning_strike';
 import ShadowBolt from '../resources/spells/data/shadow_bolt';
+import Spark from '../resources/spells/data/spark';
 import { SpellState } from '../resources/spells/spell';
 
 export interface State {
@@ -131,7 +132,10 @@ export function Provider({
     enemies: getEncounter(0).enemies.map((e) => getEnemy(e).getStartingState()),
     rewards: [],
     spells: [
-      getSpellDefinition(Fireball).getStartingState(),
+      {
+        ...getSpellDefinition(Fireball).getStartingState(),
+        additionalSpells: [getSpellDefinition(Spark).getStartingState()],
+      },
       getSpellDefinition(LightningStrike).getStartingState(),
       getSpellDefinition(ShadowBolt).getStartingState(),
     ],

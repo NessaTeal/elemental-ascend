@@ -6,6 +6,7 @@ export type StartingSpellState = {
 };
 
 export type SpellState = StartingSpellState & {
+  additionalSpells?: SpellState[];
   handle: SpellConstructor;
 };
 

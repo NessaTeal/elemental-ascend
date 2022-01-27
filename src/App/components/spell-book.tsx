@@ -19,10 +19,15 @@ const SpellBook = (): JSX.Element => {
             key={index}
             {...s}
             active={index === currentSpell}
-            description={getSpellDefinition(s).getDescription(
-              state,
-              spells[index],
-            )}
+            description={[
+              getSpellDefinition(s).getDescription(state, spells[index]),
+              ...(s.additionalSpells ?? []).map((additionalSpell) =>
+                getSpellDefinition(additionalSpell).getDescription(
+                  state,
+                  spells[index],
+                ),
+              ),
+            ].join('\n\n')}
             onClick={() => dispatch({ type: 'changeSpell', spell: index })}
           />
         ))}
