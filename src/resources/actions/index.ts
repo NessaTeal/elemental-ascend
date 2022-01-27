@@ -11,11 +11,14 @@ export async function makeATurn(
   dispatch(async (dispatch, getState) => {
     const { currentSpellCard, spellCards } = getState();
 
-    await Promise.all(
-      spellCards[currentSpellCard].spells.map((s) =>
-        getSpellDefinition(s).cast(originalTarget, s, getState(), dispatch),
-      ),
-    );
+    for (const spell of spellCards[currentSpellCard].spells) {
+      await getSpellDefinition(spell).cast(
+        originalTarget,
+        spell,
+        getState(),
+        dispatch,
+      );
+    }
 
     const { enemies } = getState();
 
