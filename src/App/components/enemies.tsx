@@ -15,7 +15,7 @@ const Enemies = (): JSX.Element => {
       <div className="enemies">
         {enemies.map((e, index) => {
           return (
-            <div key={e.name} id={e.id}>
+            <div key={e.id} id={e.id}>
               <Enemy
                 {...e}
                 actionDescription={getEnemy(e)
