@@ -2,11 +2,11 @@ import React from 'react';
 
 import { getSpellDefinition } from '../../resources';
 import { useDispatch, useState } from '../context';
-import Spell from './spell';
+import SpellCard from './spell-card';
 
 const SpellBook = (): JSX.Element => {
   const state = useState();
-  const { spells, currentSpell } = state;
+  const { spellCards, currentSpellCard } = state;
   const dispatch = useDispatch();
 
   return (
@@ -14,20 +14,19 @@ const SpellBook = (): JSX.Element => {
       <h3>Spell book</h3>
       <p>Click to change spell</p>
       <div className={'spell-book'}>
-        {spells.map((s, index) => (
-          <Spell
+        {spellCards.map((s, index) => (
+          <SpellCard
             key={index}
-            {...s}
-            active={index === currentSpell}
-            description={[
-              getSpellDefinition(s).getDescription(state, spells[index]),
-              ...(s.additionalSpells ?? []).map((additionalSpell) =>
-                getSpellDefinition(additionalSpell).getDescription(
-                  state,
-                  spells[index],
-                ),
-              ),
-            ].join('\n\n')}
+            active={index === currentSpellCard}
+            description={spellCards[currentSpellCard].spells
+              .map(
+                (s) =>
+                  `${s.name}:\n${getSpellDefinition(s).getDescription(
+                    state,
+                    s,
+                  )}`,
+              )
+              .join('\n\n')}
             onClick={() => dispatch({ type: 'changeSpell', spell: index })}
           />
         ))}

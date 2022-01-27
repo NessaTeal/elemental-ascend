@@ -22,6 +22,7 @@ export default class LightningStrike extends SpellClass {
 
   async cast(
     target: number,
+    spellState: SpellState,
     state: State,
     dispatch: GameDispatch,
   ): Promise<void> {
@@ -40,7 +41,7 @@ export default class LightningStrike extends SpellClass {
       secondTarget !== null ? state.enemies[secondTarget].id : null,
     ]).animate();
 
-    const { power } = state.spells[state.currentSpell];
+    const { power } = spellState;
     const slotPower = state.spellSlots[state.currentSlot].power;
     const totalPower = Math.ceil(power * slotPower);
 

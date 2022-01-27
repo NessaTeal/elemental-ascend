@@ -20,12 +20,13 @@ export default class Fireball extends SpellClass {
 
   async cast(
     target: number,
+    spellState: SpellState,
     state: State,
     dispatch: GameDispatch,
   ): Promise<void> {
     await new FireballAnimation(state.enemies[target].id).animate();
 
-    const { power } = state.spells[state.currentSpell];
+    const { power } = spellState;
     const slotPower = state.spellSlots[state.currentSlot].power;
     const totalPower = Math.ceil(power * slotPower);
 

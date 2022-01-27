@@ -15,10 +15,11 @@ export default class FireballPower extends RewardClass {
     dispatch({
       type: 'takeReward',
       mutation: (state: State) => {
-        const fireball = state.spells.find((s) => s.handle === Fireball);
-        if (fireball) {
-          fireball.power += 4;
-        }
+        state.spellCards.forEach((spellCard) => {
+          spellCard.spells
+            .filter((s) => s.handle === Fireball)
+            .forEach((f) => (f.power += 4));
+        });
       },
     });
   }

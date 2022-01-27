@@ -10,21 +10,21 @@ import importAll, {
 } from '../resources';
 import { EnemyState } from '../resources/enemies/enemy';
 import { RewardState } from '../resources/rewards/reward';
+import { SpellCard } from '../resources/spell-card';
 import { SpellSlotState } from '../resources/spell-slots/spell-slot';
 import Fireball from '../resources/spells/data/fireball';
 import LightningStrike from '../resources/spells/data/lightning_strike';
 import ShadowBolt from '../resources/spells/data/shadow_bolt';
 import Spark from '../resources/spells/data/spark';
-import { SpellState } from '../resources/spells/spell';
 
 export interface State {
   playerHealth: number;
   enemies: EnemyState[];
   rewards: RewardState[];
-  spells: SpellState[];
+  spellCards: SpellCard[];
   spellSlots: SpellSlotState[];
   currentSlot: number;
-  currentSpell: number;
+  currentSpellCard: number;
   playerTurn: boolean;
   level: number;
 }
@@ -131,17 +131,23 @@ export function Provider({
     playerHealth: 100,
     enemies: getEncounter(0).enemies.map((e) => getEnemy(e).getStartingState()),
     rewards: [],
-    spells: [
+    spellCards: [
       {
-        ...getSpellDefinition(Fireball).getStartingState(),
-        additionalSpells: [getSpellDefinition(Spark).getStartingState()],
+        spells: [
+          getSpellDefinition(Fireball).getStartingState(),
+          getSpellDefinition(Spark).getStartingState(),
+        ],
       },
-      getSpellDefinition(LightningStrike).getStartingState(),
-      getSpellDefinition(ShadowBolt).getStartingState(),
+      {
+        spells: [getSpellDefinition(LightningStrike).getStartingState()],
+      },
+      {
+        spells: [getSpellDefinition(ShadowBolt).getStartingState()],
+      },
     ],
     spellSlots: getStartingSpellSlots(),
     currentSlot: 0,
-    currentSpell: 0,
+    currentSpellCard: 0,
     playerTurn: true,
     level: 1,
   });

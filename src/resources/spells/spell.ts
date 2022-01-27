@@ -26,6 +26,7 @@ export abstract class SpellClass {
 
   abstract cast(
     target: number,
+    spellState: SpellState,
     state: State,
     dispatch: GameDispatch,
   ): Promise<void>;

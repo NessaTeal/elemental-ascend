@@ -9,21 +9,11 @@ export async function makeATurn(
   dispatch({ type: 'endTurn' });
 
   dispatch(async (dispatch, getState) => {
-    const { currentSpell, spells } = getState();
-
-    await getSpellDefinition(spells[currentSpell]).cast(
-      originalTarget,
-      getState(),
-      dispatch,
-    );
+    const { currentSpellCard, spellCards } = getState();
 
     await Promise.all(
-      (spells[currentSpell].additionalSpells ?? []).map((additionalSpell) =>
-        getSpellDefinition(additionalSpell).cast(
-          originalTarget,
-          getState(),
-          dispatch,
-        ),
+      spellCards[currentSpellCard].spells.map((s) =>
+        getSpellDefinition(s).cast(originalTarget, s, getState(), dispatch),
       ),
     );
 

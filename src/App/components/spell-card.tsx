@@ -1,26 +1,22 @@
 import cx from 'classnames';
 import React from 'react';
 
-import { SpellState } from '../../resources/spells/spell';
-
-export interface SpellProps extends SpellState {
+export interface SpellCardProps {
   active: boolean;
   description: string;
   onClick: () => void;
 }
 
-const Spell = ({
-  name,
+const SpellCard = ({
   active,
   description,
   onClick,
-}: SpellProps): JSX.Element => {
+}: SpellCardProps): JSX.Element => {
   return (
     <div className={cx('spell', { active })} onClick={onClick}>
-      <p>{name}</p>
       <p>{description}</p>
     </div>
   );
 };
 
-export default Spell;
+export default SpellCard;
