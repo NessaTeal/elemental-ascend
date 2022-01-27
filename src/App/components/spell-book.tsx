@@ -14,11 +14,11 @@ const SpellBook = (): JSX.Element => {
       <h3>Spell book</h3>
       <p>Click to change spell</p>
       <div className={'spell-book'}>
-        {spellCards.map((s, index) => (
+        {spellCards.map((spellCard, index) => (
           <SpellCard
             key={index}
             active={index === currentSpellCard}
-            description={spellCards[currentSpellCard].spells
+            description={spellCard.spells
               .map(
                 (s) =>
                   `${s.name}:\n${getSpellDefinition(s).getDescription(
@@ -27,7 +27,9 @@ const SpellBook = (): JSX.Element => {
                   )}`,
               )
               .join('\n\n')}
-            onClick={() => dispatch({ type: 'changeSpell', spell: index })}
+            onClick={() =>
+              dispatch({ type: 'changeSpellCard', spellCard: index })
+            }
           />
         ))}
       </div>

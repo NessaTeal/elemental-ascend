@@ -32,7 +32,7 @@ const StateContext = React.createContext<State | undefined>(undefined);
 
 export type GameDispatch = Dispatch<Action | Thunk<State, Action>>;
 export type Action =
-  | ChangeSpellAction
+  | ChangeSpellCardAction
   | EnemyAction
   | EndTurnAction
   | StartTurnAction
@@ -40,9 +40,9 @@ export type Action =
   | CastSpellAction
   | NewEncounterAction
   | TakeRewardAction;
-export type ChangeSpellAction = {
-  type: 'changeSpell';
-  spell: number;
+export type ChangeSpellCardAction = {
+  type: 'changeSpellCard';
+  spellCard: number;
 };
 export type EnemyAction = {
   type: 'enemyAction';
@@ -76,10 +76,10 @@ const DispatchContext = React.createContext<GameDispatch | undefined>(
 
 function reducer(state: State, action: Action) {
   switch (action.type) {
-    case 'changeSpell': {
+    case 'changeSpellCard': {
       return {
         ...state,
-        currentSpell: action.spell,
+        currentSpellCard: action.spellCard,
       };
     }
     case 'endTurn': {
