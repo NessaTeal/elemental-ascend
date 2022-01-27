@@ -1,3 +1,4 @@
+import { shuffle } from '../utils';
 import { Encounter } from './encounters/encounter';
 import importEncounters, {
   EncounterStorage,
@@ -78,7 +79,9 @@ export function getReward(
 }
 
 export function getRandomRewards(): RewardState[] {
-  return rewards.map((r) => r.getStartingState());
+  return shuffle(rewards)
+    .slice(0, 3)
+    .map((r) => r.getStartingState());
 }
 
 let spellSlots: SpellSlotStorage[] = [];
