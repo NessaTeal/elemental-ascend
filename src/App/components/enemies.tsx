@@ -13,7 +13,7 @@ const Enemies = (): JSX.Element => {
   return (
     <>
       <div className="enemies">
-        {enemies.map((e, index) => {
+        {enemies.map((e) => {
           return (
             <div key={e.id} id={e.id}>
               <Enemy
@@ -23,7 +23,7 @@ const Enemies = (): JSX.Element => {
                   [e.currentAction].getDescription(state, e)}
                 onClick={() => {
                   if (playerTurn) {
-                    makeATurn(index, dispatch);
+                    makeATurn(e.id, dispatch);
                   }
                 }}
               />

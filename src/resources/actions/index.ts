@@ -3,7 +3,7 @@ import { getEnemy, getRandomRewards, getSpellDefinition } from '..';
 import { EnemyDiesAnimation } from '../animations/enemies';
 
 export async function makeATurn(
-  originalTarget: number,
+  originalTarget: string,
   dispatch: GameDispatch,
 ): Promise<void> {
   dispatch({ type: 'endTurn' });

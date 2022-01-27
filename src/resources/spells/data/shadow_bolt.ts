@@ -20,12 +20,16 @@ export default class ShadowBolt extends SpellClass {
   }
 
   async cast(
-    target: number,
+    target: string,
     spellState: SpellState,
     state: State,
     dispatch: GameDispatch,
   ): Promise<void> {
-    await new ShadowBoltAnimation(state.enemies[target].id).animate();
+    const enemy = state.enemies.find((e) => e.id === target);
+    if (!enemy || enemy.health < 0) {
+      return;
+    }
+    await new ShadowBoltAnimation(target).animate();
 
     const { power } = spellState;
     const slotPower = state.spellSlots[state.currentSlot].power;

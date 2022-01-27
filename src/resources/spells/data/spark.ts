@@ -19,15 +19,21 @@ export default class Spark extends SpellClass {
   }
 
   async cast(
-    target: number,
+    target: string,
     spellState: SpellState,
     state: State,
     dispatch: GameDispatch,
   ): Promise<void> {
     const { enemies } = state;
-    target = Math.floor(Math.random() * enemies.length);
+    const aliveEnemies = enemies.filter((e) => e.health > 0);
 
-    await new FireballAnimation(state.enemies[target].id).animate();
+    if (aliveEnemies.length === 0) {
+      return;
+    }
+
+    target = aliveEnemies[Math.floor(Math.random() * aliveEnemies.length)].id;
+
+    await new FireballAnimation(target).animate();
 
     const { power } = spellState;
     const slotPower = state.spellSlots[state.currentSlot].power;

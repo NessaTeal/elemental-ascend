@@ -21,25 +21,26 @@ export default class LightningStrike extends SpellClass {
   }
 
   async cast(
-    target: number,
+    target: string,
     spellState: SpellState,
     state: State,
     dispatch: GameDispatch,
   ): Promise<void> {
     const { enemies } = state;
-    let secondTarget: number | null;
+    const enemy = enemies.find((e) => e.id === target);
+    if (!enemy || enemy.health < 0) {
+      return;
+    }
+    let secondTarget: string | null;
     if (enemies.length === 1) {
       secondTarget = null;
     } else {
-      do {
-        secondTarget = Math.floor(Math.random() * enemies.length);
-      } while (secondTarget === target);
+      const otherEnemies = enemies.filter((e) => e.id !== target);
+      secondTarget =
+        otherEnemies[Math.floor(Math.random() * otherEnemies.length)].id;
     }
 
-    await new LightningStrikeAnimation([
-      state.enemies[target].id,
-      secondTarget !== null ? state.enemies[secondTarget].id : null,
-    ]).animate();
+    await new LightningStrikeAnimation([target, secondTarget]).animate();
 
     const { power } = spellState;
     const slotPower = state.spellSlots[state.currentSlot].power;

@@ -25,7 +25,7 @@ export abstract class SpellClass {
   abstract getDescription(state: State, spellState: SpellState): string;
 
   abstract cast(
-    target: number,
+    target: string,
     spellState: SpellState,
     state: State,
     dispatch: GameDispatch,

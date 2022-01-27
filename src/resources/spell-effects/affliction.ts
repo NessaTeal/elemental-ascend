@@ -4,10 +4,14 @@ import { EnemyAffliction, EnemyAfflictionType } from '../enemies/enemy';
 export default function afflictionEffect(
   amount: number,
   afflictionType: EnemyAfflictionType,
-  target: number,
+  target: string,
 ) {
   return (draftState: State): number => {
-    const affliction = draftState.enemies[target].afflictions.find(
+    const enemy = draftState.enemies.find((e) => e.id === target);
+    if (!enemy) {
+      throw Error(`Enemy with id ${target} is not found`);
+    }
+    const affliction = enemy.afflictions.find(
       (a: EnemyAffliction) => a.type === afflictionType,
     );
 
@@ -15,7 +19,7 @@ export default function afflictionEffect(
       affliction.stacks += amount;
       return affliction.stacks;
     } else {
-      draftState.enemies[target].afflictions.push({
+      enemy.afflictions.push({
         type: afflictionType,
         stacks: amount,
       });
