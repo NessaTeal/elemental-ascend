@@ -1,9 +1,13 @@
-import { GameDispatch, State } from '../../../App/context';
+import produce from 'immer';
+
+import { State } from '../../../App/context';
 import { LightningStrikeAnimation } from '../../animations/spells';
 import damageEffect from '../../spell-effects/damage';
-import { SpellClass, SpellState } from '../spell';
+import { CastProps, SpellClass, SpellState } from '../spell';
 
 export default class LightningStrike extends SpellClass {
+  animationDuration = 500;
+
   startingState = {
     name: 'Lightning strike',
     power: 8,
@@ -20,16 +24,16 @@ export default class LightningStrike extends SpellClass {
     )}) to another random one`;
   }
 
-  async cast(
-    target: string,
-    spellState: SpellState,
-    state: State,
-    dispatch: GameDispatch,
-  ): Promise<void> {
+  _cast({
+    target,
+    spellState,
+    state,
+    dispatch,
+  }: CastProps): null | [State, () => Promise<void>] {
     const { enemies } = state;
     const enemy = enemies.find((e) => e.id === target);
     if (!enemy || enemy.health < 0) {
-      return;
+      return null;
     }
     let secondTarget: string | null;
     if (enemies.length === 1) {
@@ -40,19 +44,31 @@ export default class LightningStrike extends SpellClass {
         otherEnemies[Math.floor(Math.random() * otherEnemies.length)].id;
     }
 
-    await new LightningStrikeAnimation([target, secondTarget]).animate();
-
     const { power } = spellState;
     const slotPower = state.spellSlots[state.currentSlot].power;
     const totalPower = Math.ceil(power * slotPower);
+    const mutation = (draftState: State) => {
+      damageEffect(Math.ceil(totalPower * 0.85), target)(draftState);
+      secondTarget !== null &&
+        damageEffect(Math.ceil(totalPower * 0.25), secondTarget)(draftState);
+    };
+    const immediateState = produce(state, mutation);
 
-    dispatch({
-      type: 'castSpell',
-      mutation: (draftState) => {
-        damageEffect(Math.ceil(totalPower * 0.85), target)(draftState);
-        secondTarget !== null &&
-          damageEffect(Math.ceil(totalPower * 0.25), secondTarget)(draftState);
-      },
-    });
+    return [
+      immediateState,
+      () =>
+        new Promise(async (resolve) => {
+          await new LightningStrikeAnimation(
+            [target, secondTarget],
+            this,
+          ).animate();
+
+          dispatch({
+            type: 'castSpell',
+            mutation,
+          });
+          resolve();
+        }),
+    ];
   }
 }

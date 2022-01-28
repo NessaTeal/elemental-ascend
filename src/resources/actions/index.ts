@@ -11,30 +11,59 @@ export async function makeATurn(
   dispatch(async (dispatch, getState) => {
     const { currentSpellCard, spellCards } = getState();
 
-    for (const spell of spellCards[currentSpellCard].spells) {
-      await getSpellDefinition(spell).cast(
-        originalTarget,
-        spell,
-        getState(),
-        dispatch,
-      );
-    }
+    const { spells } = spellCards[currentSpellCard].spells.reduce(
+      (acc, cur) => {
+        const { spells, state } = acc;
+        const spell = getSpellDefinition(cur).cast({
+          target: originalTarget,
+          spellState: cur,
+          state,
+          dispatch,
+        });
 
-    const { enemies } = getState();
-
-    const diedEnemies = enemies.reduce((acc: string[], cur) => {
-      if (cur.health <= 0) {
-        acc.push(cur.id);
-      }
-
-      return acc;
-    }, []);
-
-    await Promise.all(
-      diedEnemies.map((id) => new EnemyDiesAnimation(id).animate()),
+        return spell ? { spells: [...spells, spell], state: spell[1] } : acc;
+      },
+      {
+        spells: new Array<[number, State, () => Promise<void>]>(),
+        state: getState(),
+      },
     );
 
-    dispatch({ type: 'enemiesDied', enemies: diedEnemies });
+    let lastCast = Promise.resolve();
+
+    for (let i = 0; i < spells.length; i++) {
+      const [animationDuration, , executeCast] = spells[i];
+      if (i > 0) {
+        const [previousAnimationDuration] = spells[i - 1];
+
+        const delay = Math.max(
+          0,
+          previousAnimationDuration - animationDuration + 100,
+        );
+
+        await new Promise((resolve) => setTimeout(resolve, delay));
+      }
+
+      lastCast = executeCast().then(async () => {
+        const { enemies } = getState();
+
+        const diedEnemies = enemies.reduce((acc: string[], cur) => {
+          if (cur.health <= 0) {
+            acc.push(cur.id);
+          }
+
+          return acc;
+        }, []);
+
+        await Promise.all(
+          diedEnemies.map((id) => new EnemyDiesAnimation(id).animate()),
+        );
+
+        dispatch({ type: 'enemiesDied', enemies: diedEnemies });
+      });
+    }
+
+    await lastCast;
 
     const { enemies: aliveEnemies } = getState();
 

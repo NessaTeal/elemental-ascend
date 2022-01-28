@@ -1,9 +1,13 @@
-import { GameDispatch, State } from '../../../App/context';
+import produce from 'immer';
+
+import { State } from '../../../App/context';
 import { FireballAnimation } from '../../animations/spells';
 import damageEffect from '../../spell-effects/damage';
-import { SpellClass, SpellState } from '../spell';
+import { CastProps, SpellClass, SpellState } from '../spell';
 
 export default class Fireball extends SpellClass {
+  animationDuration = 400;
+
   startingState = {
     name: 'Fireball',
     power: 10,
@@ -18,25 +22,36 @@ export default class Fireball extends SpellClass {
     )}) damage to the enemy`;
   }
 
-  async cast(
-    target: string,
-    spellState: SpellState,
-    state: State,
-    dispatch: GameDispatch,
-  ): Promise<void> {
+  _cast({
+    target,
+    spellState,
+    state,
+    dispatch,
+  }: CastProps): null | [State, () => Promise<void>] {
     const enemy = state.enemies.find((e) => e.id === target);
     if (!enemy || enemy.health < 0) {
-      return;
+      return null;
     }
-    await new FireballAnimation(target).animate();
 
     const { power } = spellState;
     const slotPower = state.spellSlots[state.currentSlot].power;
     const totalPower = Math.ceil(power * slotPower);
+    const mutation = damageEffect(totalPower, target);
+    const immediateState = produce(state, mutation);
 
-    dispatch({
-      type: 'castSpell',
-      mutation: damageEffect(totalPower, target),
-    });
+    return [
+      immediateState,
+      () =>
+        new Promise(async (resolve) => {
+          await new FireballAnimation(target, this).animate();
+
+          dispatch({
+            type: 'castSpell',
+            mutation,
+          });
+
+          resolve();
+        }),
+    ];
   }
 }

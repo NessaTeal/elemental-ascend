@@ -1,5 +1,6 @@
 import anime from 'animejs';
 
+import { SpellClass } from '../spells/spell';
 import {
   GameAnimation,
   getEnemyPosition,
@@ -9,9 +10,11 @@ import {
 
 export class FireballAnimation implements GameAnimation {
   target: string;
+  spell: SpellClass;
 
-  constructor(target: string) {
+  constructor(target: string, spell: SpellClass) {
     this.target = target;
+    this.spell = spell;
   }
   animate(): Promise<void> {
     const div = document.createElement('DIV');
@@ -30,7 +33,7 @@ export class FireballAnimation implements GameAnimation {
       targets: div,
       translateX: xDiff,
       easing: 'easeInCubic',
-      duration: 400,
+      duration: this.spell.animationDuration,
       translateY: () => anime.random(-20, 100),
       changeComplete: () => getScene().removeChild(div),
     });
@@ -41,9 +44,11 @@ export class FireballAnimation implements GameAnimation {
 
 export class LightningStrikeAnimation implements GameAnimation {
   targets: [string, string | null];
+  spell: SpellClass;
 
-  constructor(targets: [string, string | null]) {
+  constructor(targets: [string, string | null], spell: SpellClass) {
     this.targets = targets;
+    this.spell = spell;
   }
   async animate(): Promise<void> {
     const div = document.createElement('DIV');
@@ -63,7 +68,7 @@ export class LightningStrikeAnimation implements GameAnimation {
       translateX: xDiff1,
       translateY: anime.random(-50, 50),
       easing: 'easeInCubic',
-      duration: 350,
+      duration: this.spell.animationDuration * 0.65,
     });
 
     if (this.targets[1] !== null) {
@@ -77,7 +82,7 @@ export class LightningStrikeAnimation implements GameAnimation {
         translateX: `+=${xDiff2}`,
         translateY: `+=${anime.random(-30, 30)}`,
         easing: 'linear',
-        duration: 150,
+        duration: this.spell.animationDuration * 0.35,
 
         changeComplete: () => getScene().removeChild(div),
       });
@@ -93,9 +98,11 @@ export class LightningStrikeAnimation implements GameAnimation {
 
 export class ShadowBoltAnimation implements GameAnimation {
   target: string;
+  spell: SpellClass;
 
-  constructor(target: string) {
+  constructor(target: string, spell: SpellClass) {
     this.target = target;
+    this.spell = spell;
   }
   async animate(): Promise<void> {
     const div = document.createElement('DIV');
@@ -114,7 +121,7 @@ export class ShadowBoltAnimation implements GameAnimation {
       targets: div,
       translateX: xDiff,
       easing: 'easeOutCubic',
-      duration: 350,
+      duration: this.spell.animationDuration,
       changeComplete: () => getScene().removeChild(div),
     });
 

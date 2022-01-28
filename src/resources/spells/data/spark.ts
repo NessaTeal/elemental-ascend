@@ -1,9 +1,13 @@
-import { GameDispatch, State } from '../../../App/context';
+import produce from 'immer';
+
+import { State } from '../../../App/context';
 import { FireballAnimation } from '../../animations/spells';
 import damageEffect from '../../spell-effects/damage';
-import { SpellClass, SpellState } from '../spell';
+import { CastProps, SpellClass, SpellState } from '../spell';
 
 export default class Spark extends SpellClass {
+  animationDuration = 200;
+
   startingState = {
     name: 'Spark',
     power: 4,
@@ -18,31 +22,40 @@ export default class Spark extends SpellClass {
     )}) to the random enemy`;
   }
 
-  async cast(
-    target: string,
-    spellState: SpellState,
-    state: State,
-    dispatch: GameDispatch,
-  ): Promise<void> {
+  _cast({
+    target,
+    spellState,
+    state,
+    dispatch,
+  }: CastProps): null | [State, () => Promise<void>] {
     const { enemies } = state;
     const aliveEnemies = enemies.filter((e) => e.health > 0);
 
     if (aliveEnemies.length === 0) {
-      return;
+      return null;
     }
 
     target = aliveEnemies[Math.floor(Math.random() * aliveEnemies.length)].id;
 
-    await new FireballAnimation(target).animate();
-
     const { power } = spellState;
     const slotPower = state.spellSlots[state.currentSlot].power;
     const totalPower = Math.ceil(power * slotPower);
+    const mutation = damageEffect(Math.ceil(totalPower), target);
+    const immediateState = produce(state, mutation);
 
-    dispatch({
-      type: 'castSpell',
-      mutation: (draftState) =>
-        damageEffect(Math.ceil(totalPower), target)(draftState),
-    });
+    return [
+      immediateState,
+      () =>
+        new Promise(async (resolve) => {
+          await new FireballAnimation(target, this).animate();
+
+          dispatch({
+            type: 'castSpell',
+            mutation,
+          });
+
+          resolve();
+        }),
+    ];
   }
 }
